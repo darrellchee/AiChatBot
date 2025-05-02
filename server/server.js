@@ -7,23 +7,59 @@ const app = express()
 //   origin : ["http://localhost:4000"]
 // }
 
+const history = []
+const history_indexes = []
+
 app.use(cors());
 app.use(express.json())
 
 app.get("/api", (req,res) => {
-    res.json({"users" : ["userOne", "userTwo", "userThree"]})
+  const selected_history_index = req.query.history
+  try{
+    Number(selected_history_index)
+  }catch(err){
+    res.status(401).json({"error: " : err})
+  }
+  res.json(history[selected_history_index])
 })
+
+function findFirstDuplicate(arr) {
+  const seen = new Set();
+  for (const x of arr) {
+    if (seen.has(x)){
+      return arr.findIndex(e => e==x);
+    }
+    seen.add(x);  // first duplicate found
+  }
+
+  return null;  // no duplicates
+}
+
+console.log(findFirstDuplicate([5,3,7,3,9])); // 3
+
+
 
 app.post("/api", async (req, res) =>{
-    const user_input = req.body
-    res.json({"Response message" : user_input})
+  const user_input = req.body.message
+  const user_input_history = req.body.message.history
+  history_indexes.push(user_input_history)
+  history.push(user_input)
+  const result = findFirstDuplicate(history_indexes)
+  if(result !=null){history.splice(Number(result), 1)}
+  console.log(user_input)
+  console.log(history)
+  res.json({"Response message" : user_input})
 })
 
-app.post("llm", async(req,res) =>{
+app.get("/historyData", (req, res) =>{
+  res.json(history)
+})
+
+
+app.post("/llm", async(req,res) =>{
   LLM_URL = 'http://127.0.0.1:1234/v1/models';
   LLM_ID = "deepseek-r1-distill-qwen-7b";
   USER_INPUT = req.body.message
-
 })
 
 
