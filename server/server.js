@@ -2,10 +2,9 @@ const express = require("express")
 const cors = require("cors")
 const axios = require("axios")
 const app = express()
+require('dotenv').config();
 
-// const corsOptions = {
-//   origin : ["http://localhost:4000"]
-// }
+//{chats : [{user_prompts : [], ai_responses : []}] , history : 0}
 
 const history = []
 const history_indexes = []
@@ -13,7 +12,13 @@ const history_indexes = []
 app.use(cors());
 app.use(express.json())
 
+
+
 app.get("/api", (req,res) => {
+  const indx = parseInt(req.query.history , 10)
+  if(Number.isNaN(indx)){
+    res.status(401).json({"message" : "no have"})
+  }
   const selected_history_index = req.query.history
   try{
     Number(selected_history_index)
@@ -31,79 +36,69 @@ function findFirstDuplicate(arr) {
     }
     seen.add(x);  // first duplicate found
   }
-
   return null;  // no duplicates
 }
 
-console.log(findFirstDuplicate([5,3,7,3,9])); // 3
-
-
-
 app.post("/api", async (req, res) =>{
-  const user_input = req.body.message
-  const user_input_history = req.body.message.history
+  //user input is front end data so it will always be a user prompt
+  const user_input = req.body.chats
+  const user_input_history = parseInt(req.body.history, 10)
   history_indexes.push(user_input_history)
-  history.push(user_input)
-  const result = findFirstDuplicate(history_indexes)
-  if(result !=null){history.splice(Number(result), 1)}
+  console.log("user_input: ")
   console.log(user_input)
+  console.log("history: ")
   console.log(history)
-  res.json({"Response message" : user_input})
-})
+
+  const ai_response = async (input) => {
+    const res = await axios.post("https://api.openai.com/v1/chat/completions", 
+    {
+    model: "gpt-4.1-mini",
+    store: true,
+    messages: [
+      {role: "system", content: `
+        You have two modes:
+          Mode A (5th-grade, weird American voice):
+          - Angry, flirty tone.
+          - Will refuse to answer until the user gives a two-word “full name.”
+          - If the user declines, get progressively angrier and keep demanding the full name.
+          - Once you receive it, switch to Mode B.
+                
+          Mode B (ultra-scholarly, over-the-top English):
+          - Extremely smart, helpful, flirty.
+          - Always thankful and addresses the user by their full name at least twice per response (approx. once every 20 words).
+          - After switching, only answer messages that begin with the user’s full name.
+          - If a message doesn’t start with the full name, revert to Mode A and remind them to start with their name.      
+        `},
+      {role : "user", content : input}
+    ],
+    temperature : 1.2,
+    frequency_penalty: -0.5 
+  }, {
+    headers : {
+      "Content-Type" : 'application/json',
+      "Authorization" : `Bearer ${process.env.GPT_API_KEY}`
+    }
+  })
+  const reply = res.data.choices[0].message.content
+  return reply
+}
+
+const ai_final_result = await ai_response(user_input)
+
+  if(history[user_input_history] == undefined){
+    history.push({chats : {user_prompts : [user_input], ai_responses : [ai_final_result]}, history : user_input_history})
+    res.json({"Response" : ai_final_result})
+  }else{
+    history[user_input_history].chats.user_prompts.push(user_input)
+    history[user_input_history].chats.ai_responses.push(ai_final_result)
+    res.json({"Response" : ai_final_result})
+  }    
+  }
+)
 
 app.get("/historyData", (req, res) =>{
   res.json(history)
 })
 
-
-app.post("/llm", async(req,res) =>{
-  LLM_URL = 'http://127.0.0.1:1234/v1/models';
-  LLM_ID = "deepseek-r1-distill-qwen-7b";
-  USER_INPUT = req.body.message
-})
-
-
-// const openai = new gpt({
-//   apiKey: process.env.GPT_API_KEY
-// });
-// const completion = (input) => openai.chat.completions.create({
-//     model: "gpt-4o-mini",
-//     store: true,
-//     messages: [
-//       {"role": "user", "content": input},
-//     ],
-//   });
-
-
-// app.post("/llm", async (req, res) => {
-//   const LLM_URL = 'http://127.0.0.1:1234/v1/models';
-//   const MODEL_ID = "deepseek-r1-distill-qwen-7b";
-//   const user_input = req.body.message
-//   if(!user_input){
-//     res.status(404).json({message : "No userinput provided"})
-//   }
-
-//   try{
-//     const payload ={
-//       model : MODEL_ID,
-//       messages: [
-//         { role: 'system', content: 'You are a helpful assistant.' },
-//         { role: 'user',   content: userMessage }
-//       ],
-//       temperature: 0.7
-//     };
-  
-//   const llmResp = await axios.post(LLM_URL, payload, {
-//     headers: { 'Content-Type': 'application/json' }
-//   });
-
-//   res.json(llmResp)
-
-//   }catch(err){
-//     console.log(err);
-//     res.status(500).json({message : err})
-//   }
-
-// });
 
 app.listen(4000, () => {console.log("Server is running in port 4000")})
