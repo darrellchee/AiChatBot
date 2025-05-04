@@ -6,12 +6,12 @@ import axios from "axios"
 
 function App() {
   // 1) Match your API’s shape
-  const [clientSideCache, setClientSideCache] = useState({user_prompts : [], ai_prompts : []})
-  
+  const [clientSideCache, setClientSideCache] = useState([])
+  const [chatHistories, setChatHistories] = useState([]);
+
   const [backendData, setBackendData] = useState({chats : {user_prompts : [], ai_responses : []} , history : 0});
   //front end data will always be an user prompt or user response
   const [FrontendData, setFrontendData] = useState('');
-  const [chatHistories, setChatHistories] = useState([]);
   const history_index = 0
 
   const fetch_api = () =>{
@@ -30,8 +30,10 @@ function App() {
     histories()
   }, []);
 
+
   const post_api = () =>{
     if(FrontendData.trim() !== ''){
+      setClientSideCache(prev => [...prev , FrontendData.trim()])
       axios.post('http://localhost:4000/api', {chats : FrontendData.trim(), history : history_index})
       .then(res => {
         const ai_reply = res.data.Response
@@ -39,10 +41,12 @@ function App() {
           ...prev, 
           chats: {user_prompts : [...prev.chats.user_prompts , FrontendData.trim()] , ai_responses : [...prev.chats.ai_responses, ai_reply]}
         }))
+        setClientSideCache(prev => [...prev , ai_reply])
         setFrontendData('')
         console.log(backendData)
         console.log(backendData.chats)
         fetch_api()
+        histories()
     })
     .catch(err => console.log(err))
   }}
@@ -54,26 +58,30 @@ function App() {
         <h1 id="side-bar-header">Chats: </h1>
         <ul id="responses">
           {chatHistories?.map((element, index) =>(
-            <li key={index}>{element.chats.user_prompts[0]}</li>
+            <li key={index}>{element.chats.user_prompts[0]}</li> //side bar
           ))}
         </ul>
       </div>
-
+        
       <div className="body">
-        <ul className="responses">
-          {backendData.chats.user_prompts?.map((item, index) =>(
-            <li key={index} className="user-prompt">{item}</li>
-          ))}
-          {backendData.chats.ai_responses?.map((element, index) =>(
-            <li key={index} className="ai-response">{element}</li>
-          ))}
-        </ul>
+      <div className="scroll-content">
+        <ul className="responses"> 
+          {clientSideCache?.map((item, index) =>{
+            if(index % 2 == 0){
+              return <li key={index} className="user-prompt">{item}</li>
+            }else{
+              return <li key={index} className="ai-response">{item}</li>
+            }
+            })}
+        </ul> 
+        </div>
 
-
-        <div id="footer-search-bar">
-          <textarea id="footer-search-bar-body" placeholder="Ask anything" onChange={e => setFrontendData(e.target.value)} value={FrontendData}></textarea>
-          <div id="search-bar-submit">
-            <div id="submit-button" onClick={() => post_api()}></div>
+        <div className="footer">
+          <div id="footer-search-bar">
+            <textarea id="footer-search-bar-body" placeholder="Ask anything" onChange={e => setFrontendData(e.target.value)} value={FrontendData}></textarea>
+            <div id="search-bar-submit">
+              <div id="submit-button" onClick={() => post_api()}></div>
+            </div>  
           </div>
         </div>
       </div>

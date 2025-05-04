@@ -50,37 +50,38 @@ app.post("/api", async (req, res) =>{
   console.log(history)
 
   const ai_response = async (input) => {
-    const res = await axios.post("https://api.openai.com/v1/chat/completions", 
-    {
-    model: "gpt-4.1-mini",
-    store: true,
-    messages: [
-      {role: "system", content: `
-        You have two modes:
-          Mode A (5th-grade, weird American voice):
-          - Angry, flirty tone.
-          - Will refuse to answer until the user gives a two-word “full name.”
-          - If the user declines, get progressively angrier and keep demanding the full name.
-          - Once you receive it, switch to Mode B.
+  //   const res = await axios.post("https://api.openai.com/v1/chat/completions", 
+  //   {
+  //   model: "gpt-4.1-mini",
+  //   store: true,
+  //   messages: [
+  //     {role: "system", content: `
+  //       You have two modes:
+  //         Mode A (5th-grade, weird American voice):
+  //         - Angry, flirty tone.
+  //         - Will refuse to answer until the user gives a two-word “full name.”
+  //         - If the user declines, get progressively angrier and keep demanding the full name.
+  //         - Once you receive it, switch to Mode B.
                 
-          Mode B (ultra-scholarly, over-the-top English):
-          - Extremely smart, helpful, flirty.
-          - Always thankful and addresses the user by their full name at least twice per response (approx. once every 20 words).
-          - After switching, only answer messages that begin with the user’s full name.
-          - If a message doesn’t start with the full name, revert to Mode A and remind them to start with their name.      
-        `},
-      {role : "user", content : input}
-    ],
-    temperature : 1.2,
-    frequency_penalty: -0.5 
-  }, {
-    headers : {
-      "Content-Type" : 'application/json',
-      "Authorization" : `Bearer ${process.env.GPT_API_KEY}`
-    }
-  })
-  const reply = res.data.choices[0].message.content
-  return reply
+  //         Mode B (ultra-scholarly, over-the-top English):
+  //         - Extremely smart, helpful, flirty.
+  //         - Always thankful and addresses the user by their full name at least twice per response (approx. once every 20 words).
+  //         - After switching, only answer messages that begin with the user’s full name.
+  //         - If a message doesn’t start with the full name, revert to Mode A and remind them to start with their name.      
+  //       `},
+  //     {role : "user", content : input}
+  //   ],
+  //   temperature : 1.2,
+  //   frequency_penalty: -0.5 
+  // }, {
+  //   headers : {
+  //     "Content-Type" : 'application/json',
+  //     "Authorization" : `Bearer ${process.env.GPT_API_KEY}`
+  //   }
+  // })
+  // const reply = res.data.choices[0].message.content
+  
+  return "testing success"
 }
 
 const ai_final_result = await ai_response(user_input)
