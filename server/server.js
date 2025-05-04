@@ -4,10 +4,10 @@ const axios = require("axios")
 const app = express()
 require('dotenv').config();
 
-//{chats : [{user_prompts : [], ai_responses : []}] , history : 0}
-
+//{chats : {user_prompts : [user_input], ai_responses : [ai_final_result]}, history : user_input_history} --history object
 const history = []
 const history_indexes = []
+const client_side_ai_user_chats = []
 
 app.use(cors());
 app.use(express.json())
@@ -44,10 +44,6 @@ app.post("/api", async (req, res) =>{
   const user_input = req.body.chats
   const user_input_history = parseInt(req.body.history, 10)
   history_indexes.push(user_input_history)
-  console.log("user_input: ")
-  console.log(user_input)
-  console.log("history: ")
-  console.log(history)
 
   const ai_response = async (input) => {
   //   const res = await axios.post("https://api.openai.com/v1/chat/completions", 
@@ -82,10 +78,9 @@ app.post("/api", async (req, res) =>{
   // const reply = res.data.choices[0].message.content
   
   return "testing success"
-}
+   }
 
-const ai_final_result = await ai_response(user_input)
-
+  const ai_final_result = await ai_response(user_input)  
   if(history[user_input_history] == undefined){
     history.push({chats : {user_prompts : [user_input], ai_responses : [ai_final_result]}, history : user_input_history})
     res.json({"Response" : ai_final_result})
@@ -95,10 +90,28 @@ const ai_final_result = await ai_response(user_input)
     res.json({"Response" : ai_final_result})
   }    
   }
-)
+  )
 
 app.get("/historyData", (req, res) =>{
   res.json(history)
+})
+
+app.post("/postFullChatData", (req, res) =>{
+  const data = req.body.client_cache
+  const index = req.body.history_index
+  if(client_side_ai_user_chats.find(object => object.index == index))
+  client_side_ai_user_chats.push({client_cache : data, history_index : index})
+  console.log("Client side ai user chat history: ")
+  console.log(client_side_ai_user_chats)
+})
+
+app.post("/getFullChatData", (req, res) =>{
+  const index = req.body.history_index
+  const returned_attribute = client_side_ai_user_chats.find(object => object.history_index == index)
+  console.log("user input index: ", index)
+  console.log("returned attribute: " , returned_attribute)
+  console.log("about to send to client: " , client_side_ai_user_chats[returned_attribute])
+  res.json({"response" : client_side_ai_user_chats[returned_attribute]})
 })
 
 

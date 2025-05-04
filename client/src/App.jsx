@@ -3,20 +3,24 @@ import './App.css'
 import axios from "axios"
 // import llm from "./llm.jsx"
 
+//{chats : [{user_prompts : [], ai_responses : []}] , history : 0} history object
+
+
 
 function App() {
   // 1) Match your API’s shape
   const [clientSideCache, setClientSideCache] = useState([])
   const [chatHistories, setChatHistories] = useState([]);
-
+  //backendData might be redundant
   const [backendData, setBackendData] = useState({chats : {user_prompts : [], ai_responses : []} , history : 0});
   //front end data will always be an user prompt or user response
   const [FrontendData, setFrontendData] = useState('');
-  const history_index = 0
+  const [history_index, setHistory_index] = useState(0);
 
+  //backendData might be redundant
   const fetch_api = () =>{
     axios.get(`http://localhost:4000/api/?history=${history_index}`)
-    .then(res => setBackendData({chats : res.data.chats, history : history_index}))
+    .then(res => setBackendData({chats : res.data.chats, history : history_index}), console.log("fetch success"))
     .catch(err => console.log("there is an error: " + err))
   }
 
@@ -27,6 +31,7 @@ function App() {
   }
 
   useEffect(() =>{
+    fetch_api()
     histories()
   }, []);
 
@@ -43,31 +48,65 @@ function App() {
         }))
         setClientSideCache(prev => [...prev , ai_reply])
         setFrontendData('')
-        console.log(backendData)
-        console.log(backendData.chats)
+        // console.log(backendData)
+        // console.log(backendData.chats)
         fetch_api()
         histories()
     })
     .catch(err => console.log(err))
   }}
 
+  const post_user_ai_chat = () =>{
+    axios.post('http://localhost:4000/postFullChatData', {client_cache : clientSideCache, history_index : history_index})
+    .catch(err => console.log(err))
+  }
+
+  const get_user_ai_chat = () =>{
+    console.log("user input: ", history_index)
+    axios.post('http://localhost:4000/getFullChatData', {history_index : history_index})
+    .then(res => {
+      console.log(res.data.response)
+      setClientSideCache(res.data.response.client_cache)
+      console.log("get_user_ai success")
+    })
+    .catch(err => console.log(err))
+  }
+
+  const handle_new_chat = () =>{
+    if(!chatHistories){
+      console.log("Enter a prompt before making a new chat")
+    }else{
+    post_user_ai_chat()
+    const new_history_index = history_index + 1
+    setHistory_index(new_history_index)
+    setClientSideCache([])
+    fetch_api()
+    }}
+
+    //user response always delayed by 1 request refer to photo in gallery to see
+  const handle_get_previous_chat = (input_index) =>{
+    setHistory_index(input_index)
+    fetch_api()
+    get_user_ai_chat()
+  }
+
   return (
     <div className="app">
       <div className="header"></div>
       <div className="side-bar">
-        <h1 id="side-bar-header">Chats: </h1>
-        <ul id="responses">
+        <h1 id="side-bar-header">Chats: <div className="new-chat-icon" onClick={() => handle_new_chat()}>+</div></h1>
+        <div id="responses">
           {chatHistories?.map((element, index) =>(
-            <li key={index}>{element.chats.user_prompts[0]}</li> //side bar
+            <p key={index} className="side-bar-histories" onClick={() => handle_get_previous_chat(element.history)}>{element.chats.user_prompts[0]}</p> //side bar history
           ))}
-        </ul>
+        </div>
       </div>
         
       <div className="body">
       <div className="scroll-content">
         <ul className="responses"> 
           {clientSideCache?.map((item, index) =>{
-            if(index % 2 == 0){
+            if(index % 2 === 0){
               return <li key={index} className="user-prompt">{item}</li>
             }else{
               return <li key={index} className="ai-response">{item}</li>
