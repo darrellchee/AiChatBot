@@ -31,10 +31,8 @@ function App() {
   }
 
   useEffect(() =>{
-    fetch_api()
     histories()
   }, []);
-
 
   const post_api = () =>{
     if(FrontendData.trim() !== ''){
@@ -86,6 +84,7 @@ function App() {
     //user response always delayed by 1 request refer to photo in gallery to see
   const handle_get_previous_chat = (input_index) =>{
     setHistory_index(input_index)
+    console.log("history index: ", history_index)
     fetch_api()
     get_user_ai_chat()
   }
