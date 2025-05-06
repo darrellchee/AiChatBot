@@ -7,6 +7,9 @@ require('dotenv').config();
 //{chats : {user_prompts : [user_input], ai_responses : [ai_final_result]}, history : user_input_history} --history object
 const history = []
 const client_side_ai_user_chats = []
+const ai_presets = [{name : 'Darrell Chee', description : ''}, {name : 'Samuel Jason', description : ''}]
+
+const selected_ai = ''
 
 app.use(cors());
 app.use(express.json())
@@ -98,6 +101,11 @@ app.post("/getFullChatData", (req, res) =>{
   }
   console.log("Response to client: " , returned_attribute.client_cache)
   res.json({"response" : returned_attribute.client_cache})
+})
+
+app.get("/getaipresets", (req, res) =>{
+  console.log(ai_presets)
+  res.json({"message" : ai_presets})
 })
 
 

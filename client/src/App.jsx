@@ -13,7 +13,7 @@ function App() {
   //front end data will always be an user prompt or user response
   const [FrontendData, setFrontendData] = useState('');
   const [history_index, setHistory_index] = useState(0);
-
+  const [initial_user_prompt, setInitialUserPrompt] = useState(null)
 
   const histories = () =>{
     axios.get(`http://localhost:4000/historyData`)
@@ -42,22 +42,23 @@ function App() {
   //{chats : [{user_prompts : [], ai_responses : []}] , history : 0} history object
   const post_api = () =>{
     if(FrontendData.trim() !== ''){
+      setInitialUserPrompt(FrontendData.trim())
+      setFrontendData('')
       console.log("front end data: ", FrontendData)
       axios.post('http://localhost:4000/api', {chats : FrontendData.trim(), history : history_index})
       .then(res => {
+        setInitialUserPrompt(null)
         const ai_reply = res.data.Response
         setClientSideCache(prev => {
           const merge = [...prev , FrontendData.trim(), ai_reply];
           post_user_ai_chat(merge);
           return merge
         })
-        setFrontendData('')
         histories()
     })
     .catch(err => console.log(err))
   }
 }
-
 
   //changes 
   const post_user_ai_chat = (updated) =>{
@@ -74,10 +75,12 @@ function App() {
       const new_history_index = (chatHistories.at?.(-1).history ?? -1) + 1
       setHistory_index(new_history_index)
       setClientSideCache([])
+      setInitialUserPrompt(null)
     }}
 
     //user response always delayed by 1 request refer to photo in gallery to see
   const handle_get_previous_chat = (input_index) =>{
+    setInitialUserPrompt(null)
     get_user_ai_chat(input_index)
     setHistory_index(input_index)
   }
@@ -89,7 +92,7 @@ function App() {
         <h1 id="side-bar-header">Chats: <div className="new-chat-icon" onClick={() => handle_new_chat()}>+</div></h1>
         <div id="responses">
           {chatHistories?.map((element, index) =>(
-            <p key={index} className="side-bar-histories" onClick={() => handle_get_previous_chat(element.history)} >{element.chats.user_prompts[0]}</p> //side bar history
+            <p key={index} className={element.history === history_index? "side-bar-histories active" : "side-bar-histories"} onClick={() => handle_get_previous_chat(element.history)} >{element.chats.user_prompts[0]}</p> //side bar history
           ))}
         </div>
       </div>
@@ -104,10 +107,13 @@ function App() {
               return <li key={index} className="ai-response">{item}</li>
             }
             })}
+          {initial_user_prompt && (
+            <li className="user-prompt">{initial_user_prompt}</li>
+          )}
         </ul> 
         </div>
 
-        <div className="footer">
+        <div className={!clientSideCache || clientSideCache.length === 0 ? "footer initial" : "footer"}>
           <div id="footer-search-bar">
             <textarea id="footer-search-bar-body" placeholder="Ask anything" onChange={e => setFrontendData(e.target.value)} maxLength='150' value={FrontendData}></textarea>
             <div id="search-bar-submit">

@@ -1,0 +1,75 @@
+*{
+    margin: none;
+    box-sizing: border-box;
+}
+
+.app{
+    font-family: monospace; 
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    grid-template-areas: 
+    'header'
+    'body'
+    ;
+    height: 100vh;
+}
+
+.header{
+    position: relative;
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center; 
+    flex-direction: column;
+}
+
+.selectedAi{
+    position: absolute;
+    top: 85%;
+}
+
+.body{
+    grid-area: body;
+}
+
+.ai_preset_container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.aiPresets{
+    justify-content: center;
+    display: flex;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: gray;
+    background-color: fafafa;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    aspect-ratio: 1/1.4;
+    width: 25vh;
+    list-style: none;
+    padding: 2%;
+    margin: 2vh;
+}
+
+.aiPresets:hover{
+    border-color: black;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+}
+
+.aiPresetsActive{
+    justify-content: center;
+    display: flex;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: black;
+    background-color: fafafa;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+    aspect-ratio: 1/1.4;
+    width: 25vh;
+    list-style: none;
+    padding: 2%;
+    margin: 2vh;
+}
