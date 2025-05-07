@@ -12,6 +12,7 @@
     'body'
     ;
     height: 100vh;
+    overflow-y: auto;
 }
 
 .header{
@@ -31,6 +32,9 @@
 
 .body{
     grid-area: body;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .ai_preset_container{
@@ -40,6 +44,7 @@
 }
 
 .aiPresets{
+    cursor: pointer;
     justify-content: center;
     display: flex;
     border-radius: 10px;
@@ -50,7 +55,7 @@
     aspect-ratio: 1/1.4;
     width: 25vh;
     list-style: none;
-    padding: 2%;
+    padding: 1%;
     margin: 2vh;
 }
 
@@ -60,16 +65,78 @@
 }
 
 .aiPresetsActive{
-    justify-content: center;
-    display: flex;
-    border-radius: 10px;
     border-style: solid;
     border-color: black;
     background-color: fafafa;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
-    aspect-ratio: 1/1.4;
-    width: 25vh;
-    list-style: none;
-    padding: 2%;
-    margin: 2vh;
+}
+
+.setNewAiErrorField{
+    border-color: red;
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake{
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+.newAddField{
+    display: block;
+}
+
+.newAddFieldActive{
+    display: none;
+}
+
+.newAiField{
+    display: none;
+}
+
+.newAiFieldActive{
+    display: block;
+}
+
+.newAiName{
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    border-color: gray;
+    border-style: solid;
+    border-radius: 15px;
+    border-width: 1px;
+    height: 4vh;
+    resize: none;
+    padding: 1vh;
+}
+
+.newAiDesc{
+    height: 19vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    border-color: gray;
+    border-style: solid;
+    border-radius: 15px;
+    border-width: 1px;
+    resize: none;
+    padding: 1vh;
+}
+
+.submitbutton{
+    display: none;
+}
+
+.submitbuttonActive{
+    align-self: center;
+    border-style: solid;
+    border-color: gray;
+    border-radius: 15px;
+    margin: 5vh;
+    height: 5vh;
+    aspect-ratio: 3/1;
+    padding: 1vh;
+    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

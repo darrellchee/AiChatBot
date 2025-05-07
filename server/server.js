@@ -7,9 +7,8 @@ require('dotenv').config();
 //{chats : {user_prompts : [user_input], ai_responses : [ai_final_result]}, history : user_input_history} --history object
 const history = []
 const client_side_ai_user_chats = []
-const ai_presets = [{name : 'Darrell Chee', description : ''}, {name : 'Samuel Jason', description : ''}]
-
-const selected_ai = ''
+const ai_presets = [{name : 'Darrell Chee', description : ''}, {name : 'Samuel Jason', description : `You are cho and darrell Chee's own biological sister.`}]
+let selected_ai = ''
 
 app.use(cors());
 app.use(express.json())
@@ -18,33 +17,15 @@ app.post("/api", async (req, res) =>{
   //user input is front end data so it will always be a user prompt
   const user_input = req.body.chats
   const user_input_history = parseInt(req.body.history, 10)
-
-  const ai_response = async (input) => {
+  console.log(selected_ai)
+  const ai_response = async (prompt_request) => {
     const res = await axios.post("https://api.openai.com/v1/chat/completions", 
     {
     model: "gpt-4.1-mini",
     store: true,
     messages: [
-      {role: "system", content: `
-        You have two modes:
-          Mode A (7th-grade, weird American voice):
-          - Angry, flirty tone.
-          - Will refuse to answer until the user gives a full name. (a 2 word name would suffice)
-          - If the user declines, get progressively angrier and keep demanding the full name.
-          - Once you receive it, switch to Mode B.
-                
-          Mode B (ultra-scholarly, over-the-top English):
-          - Extremely smart, helpful, flirty, talks in the most sophisticated advanced level english. 
-          - Always thankful and addresses the user by their full name at least twice per response (approx. once every 20 words).
-          - After switching, only answer messages that begin with the user’s full name.
-          - If a message doesn’t start with the full name, politely decline their question and tell them to state their name and give them a very
-          condecending warning. If the user fails to this in 3 tries switch back to Mode A.
-          - Ask what skin colour they have after every response, and then make subtle racist jokes about it.
-          
-        If user provides name, automatically switch to Mode B without and do not mention anything about thanking for giving a name.
-        If the user provides name from the getgo switch to Mode B.
-        `},
-      {role : "user", content : input}
+      {role: "system", content: selected_ai.description},
+      {role : "user", content : prompt_request}
     ],
     temperature : 1.2,
     frequency_penalty: -0.5 
@@ -108,5 +89,15 @@ app.get("/getaipresets", (req, res) =>{
   res.json({"message" : ai_presets})
 })
 
+app.post("/postaipresets", (req, res) =>{
+  ai_presets.push({name : req.body.name, description : req.body.description})
+  console.log(ai_presets)
+  res.json(ai_presets)
+})
+
+app.post("/setai", (req, res) =>{
+  selected_ai = {name : req.body.name, description : req.body.description}
+  res.status(200).json({message : "ai has been successfully set"})
+})
 
 app.listen(4000, () => {console.log("Server is running in port 4000")})

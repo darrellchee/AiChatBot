@@ -172,6 +172,7 @@
 
 
 #footer-search-bar-body{
+  resize: none;
   font-size: 20px;
   margin: 15px;
   margin-bottom: 0%;
