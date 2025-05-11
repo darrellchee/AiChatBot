@@ -16,22 +16,41 @@
 .header{
   grid-area : header;
   position: sticky;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+}
+
+.ai-name{
+  border: solid;
+  border-width: 1px;
+  border-color: black;
+  border-radius: 15px;
+  padding: 1vh;
+  cursor: pointer;
+  margin-left: 8vh;
+  font-family: monospace; 
+  font-weight: bold;
+  font-size: 2vh;
+  color: rgb(66, 66, 66);
 }
 
 .new-chat-icon{
   cursor: pointer;
   font-weight: lighter;
   display: flex;
-  margin-right: 7%;
+  margin-right: 2vh;
   height: 100%;
   aspect-ratio: 1 / 1;
   border-style: solid;
-  border-radius: 15px;
+  border-radius: 50%;
   font-size: 30px;
   border-width: 2px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   justify-content: center;
   align-items: center;
+  padding-bottom: 0.5%;
 }
 
 .new-chat-icon:hover{
@@ -74,7 +93,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-#side-bar-header{
+.side-bar-header{
   margin-left: 10px;
   font-family: monospace; 
   font-weight: lighter;
@@ -161,15 +180,14 @@
   border: 1px solid lightgray;
   border-radius: 30px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  grid-template-columns: 0.3fr auto 0.3fr;
-  grid-template-rows: 0.8fr 0.2fr;
+  grid-template-columns: 2fr auto 1fr;
+  grid-template-rows: 1fr 1fr;
   font-size: 20px;
   grid-template-areas: 
     'footer-search-bar-body footer-search-bar-body footer-search-bar-body'
     '. . search-bar-submit';
   background-color: white;
 }
-
 
 #footer-search-bar-body{
   resize: none;
@@ -192,14 +210,15 @@
 
 #submit-button{
   margin: 0;
+  margin-bottom: 1vh;
   text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border-style: solid;
   border-color: lightgray;
-  border-radius: 60px;
-  height: 20px;
-  width: 20px;
-  margin-right: 20px;
+  border-radius: 15px;
+  height: 3vh;
+  width: 7vh;
+  margin-right: 2vh;
   padding: 0;
 }
 

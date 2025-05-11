@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {Link} from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import HomeCSS from "./home.module.css";
 import axios from 'axios';
 
@@ -10,6 +10,9 @@ function Home(){
     const [newAi, setNewAi] = useState({})
     const [newFieldActive, setnewFieldActive] = useState(false)
     const [newAierrorField, setnewAierrorField] = useState(false)
+    const nameRef = useRef(null)
+    const descRef = useRef(null)
+    const navigate = useNavigate()
 
     const fetch_ai_preset = () =>{
         axios.get("http://localhost:4000/getaipresets")
@@ -49,16 +52,28 @@ function Home(){
                 setnewFieldActive(false)
             }else{
                 setnewAierrorField(true)
+                nameRef.current.focus();
             }
+        }
+    }
+
+    const handleDesc = (e) =>{
+        if(e.key === "Enter" && !e.shiftKey){
+            e.preventDefault();
+            descRef.current.focus();
         }
     }
 
     const launchApp = () =>{
         const ai_input = aiPresets?.findIndex(e => e.name === selectedAi)
         axios.post("http://localhost:4000/setai" , {name : aiPresets[ai_input].name, description : aiPresets[ai_input].description})
-        .then(res => console.log(res.data.message))
+        .then(res => {
+            console.log(res.data.message)
+            navigate('/chat')
+        })
         .catch(err => console.log("there is an error in launching the chat app: ", err))
     }
+
 
     useEffect(()=>{
         fetch_ai_preset()
@@ -67,6 +82,14 @@ function Home(){
     useEffect(()=>{
         fetch_ai_preset()
     }, [newFieldActive])
+
+    useEffect(() =>{
+        setTimeout(() =>{
+            if(newAierrorField === true){
+                setnewAierrorField(false)
+            }
+        }, 700)
+    }, [newAierrorField])
 
     return(
         <div className={HomeCSS.app}>
@@ -83,16 +106,16 @@ function Home(){
                             <li key={idx} className={HomeCSS.aiPresets + (isActive ?` ${HomeCSS.aiPresetsActive}` : '')} onClick={() => handleSelectAi(preset.name)}>{preset.name}</li>
                         )
                     })}
-                    <li className={HomeCSS.aiPresets + (newAierrorField ?` ${HomeCSS.setNewAiErrorField}` : '')} onClick={() => handleNewAi()}>
+                    <li className={(newAierrorField ?` ${HomeCSS.setNewAiErrorField}` : `${HomeCSS.aiPresets}`)} onClick={() => handleNewAi()}>
                         <p className={HomeCSS.newAddField  + (newFieldActive ?` ${HomeCSS.newAddFieldActive}` : '')}>Click to add</p>
                         <div className={HomeCSS.newAiField  + (newFieldActive ?` ${HomeCSS.newAiFieldActive}` : '')}>
                             <div>
                                 <p>Give it a name:</p>
-                                <textarea className={HomeCSS.newAiName} onChange={e => setNewAi(prev => ({...prev , name : e.target.value}))} value={newAi.name}></textarea>
+                                <textarea className={HomeCSS.newAiName} ref={nameRef} onChange={e => setNewAi(prev => ({...prev , name : e.target.value}))} onKeyDown={handleDesc} value={newAi.name}></textarea>
                             </div>
                             <div>
                                 <p>Tell it how it behaves:</p>
-                                <textarea className={HomeCSS.newAiDesc} onChange={e => setNewAi(prev => ({...prev, description : e.target.value}))} onKeyDown={handleSubmit}></textarea>
+                                <textarea className={HomeCSS.newAiDesc} ref={descRef} onChange={e => setNewAi(prev => ({...prev, description : e.target.value}))} onKeyDown={handleSubmit}></textarea>
                             </div>
                         </div>
                     </li>
