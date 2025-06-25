@@ -11,16 +11,13 @@ function App() {
   // 1) Match your API’s shape
   const [clientSideCache, setClientSideCache] = useState([])
   const [chatHistories, setChatHistories] = useState([]);
-
   //front end data will always be an user prompt or user response
   const [FrontendData, setFrontendData] = useState('');
-
   const [history_index, setHistory_index] = useState(0);
-
 
   const [initial_user_prompt, setInitialUserPrompt] = useState(null)
   const [AiName, setAiName] = useState('');
-  const nagivate = useNavigate()
+  const navigate = useNavigate()
 
   const histories = () =>{
     axios.get(`http://localhost:4000/chatHistory`)
@@ -48,27 +45,29 @@ function App() {
     console.log("user input: ", index)
     axios.post('http://localhost:4000/getFullChatData', {chat_index : index})
     .then(res => {
-      console.log(res.data.response)
-      setClientSideCache(res.data.response)
+      console.log(res.data)
+      setClientSideCache(res.data)
       console.log("get_user_ai success")
     })
     .catch(err => console.log(err))
   }
 
   const handle_change_ai = () =>{
-    nagivate("/")
+    navigate("/")
   }
 
   //{chats : [{user_prompts : [], ai_responses : []}] , history : 0} history object
   const post_api = () =>{
     if(FrontendData.trim() !== ''){
-      setInitialUserPrompt(FrontendData.trim())
-      setFrontendData('')
+    const prompt = FrontendData.trim()
+    if (!prompt) return
+    setInitialUserPrompt(prompt)
+    setFrontendData('')
       console.log("front end data: ", FrontendData)
       axios.post('http://localhost:4000/api', {chat_content : FrontendData.trim(), chat_index : history_index})
       .then(res => {
         setInitialUserPrompt(null)
-        const ai_reply = res.data.Response
+        const ai_reply = res.data
         setClientSideCache(prev => {
           const merge = [...prev , FrontendData.trim(), ai_reply];
           post_user_ai_chat(merge);
@@ -98,7 +97,7 @@ function App() {
       console.log("Enter a prompt before making a new chat")
     }else{
       post_user_ai_chat(clientSideCache)
-      const new_history_index = (chatHistories.at?.(-1).history ?? -1) + 1
+      const new_history_index = (chatHistories.at?.(-1)?.chat_index ?? -1) + 1
       setHistory_index(new_history_index)
       setClientSideCache([])
       setInitialUserPrompt(null)
@@ -120,7 +119,7 @@ function App() {
         <h1 className="side-bar-header">Chats: <div className="new-chat-icon" onClick={() => handle_new_chat()}>+</div></h1>
         <div id="responses">
           {chatHistories?.map((element, index) =>(
-            <p key={index} className={element.history === history_index? "side-bar-histories active" : "side-bar-histories"} onClick={() => handle_get_previous_chat(element.chat_index)} >{element.chat_content[0]}</p> //side bar history
+            <p key={index} className={element.chat_index === history_index? "side-bar-histories active" : "side-bar-histories"} onClick={() => handle_get_previous_chat(element.chat_index)} >{element.chat_content[0]}</p> //side bar history
           ))}
         </div>
       </div>

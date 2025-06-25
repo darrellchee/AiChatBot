@@ -119,7 +119,7 @@ app.post("/postFullChatData", async (req, res) =>{
   try{
     const result = await ChatModel.findOneAndUpdate(
       {chat_index : index},
-      {$push: {chat_content: data}},
+      {$set: { chat_content: data }},
       {new: true, upsert: true}
     )
     res.status(201).json(result)
@@ -130,7 +130,6 @@ app.post("/postFullChatData", async (req, res) =>{
 
 app.post("/getFullChatData", async (req, res) =>{
   const index = req.body.chat_index
-  console.log(index)
   try{
     const result = await ChatModel.findOne(
       {chat_index : index},
