@@ -96,14 +96,6 @@ app.post("/api", async (req, res) =>{
   }
   
   
-  // if(history[user_input_history] == undefined){
-  //   history.push({chats : {user_prompts : [user_input], ai_responses : [ai_final_result]}, history : user_input_history})
-  //   return res.json({"Response" : ai_final_result})
-  // }else{
-  //   history[user_input_history].chats.user_prompts.push(user_input)
-  //   history[user_input_history].chats.ai_responses.push(ai_final_result)
-  //   return res.json({"Response" : ai_final_result})
-  // }    
 })
 
 app.get("/chatHistory", async (req, res) =>{
