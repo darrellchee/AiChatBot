@@ -2,7 +2,7 @@ import React, { useState, useEffect} from "react";
 import './App.css'
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
-require('dotenv').config();
+
 
 // import llm from "./llm.jsx"
 
@@ -21,7 +21,7 @@ function App() {
   const navigate = useNavigate()
 
   const histories = () =>{
-    axios.get(`http://localhost:4000/chatHistory`)
+    axios.get(`${process.env.REACT_APP_API_URL}/chatHistory`)
     .then(res => {
       setChatHistories(res.data)
     })

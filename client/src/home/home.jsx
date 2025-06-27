@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import HomeCSS from "./home.module.css";
 import axios from 'axios';
-require('dotenv').config();
+
 
 function Home(){
     const [aiPresets , setAiPresets] = useState([])

@@ -4,6 +4,7 @@ const axios = require("axios")
 const app = express()
 const mongoose = require('mongoose')
 require('dotenv').config();
+const PORT = process.env.PORT || 4000
 
 //legacy client_side object: {client_cache : clientSideCache, history_index : history_index}
 
@@ -21,7 +22,7 @@ app.use(express.json())
 mongoose.connect(database_url)
 .then(() =>{
   console.log("successfully connected to database")
-  app.listen(4000, () => {console.log("Server is running in port 4000")})
+  app.listen(PORT, () => {console.log("Server is running in port 4000")})
 })
 .catch(err => console.log(err))
 
