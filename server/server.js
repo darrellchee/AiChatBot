@@ -4,12 +4,13 @@ const axios = require("axios")
 const app = express()
 const mongoose = require('mongoose')
 require('dotenv').config();
+
 //legacy client_side object: {client_cache : clientSideCache, history_index : history_index}
 
 //updated: chats = {chat_content: [chats], chat_index : chat_index}
 
-
 //{chats : {user_prompts : [user_input], ai_responses : [ai_final_result]}, history : user_input_history} --history object
+
 const history = []
 let selected_ai = {name : "Darrell Chee", description : "You are a helpful cheerfull man"}
 const database_url = process.env.MONGO_URL
@@ -23,7 +24,6 @@ mongoose.connect(database_url)
   app.listen(4000, () => {console.log("Server is running in port 4000")})
 })
 .catch(err => console.log(err))
-
 
 const AiPresetSchema = new mongoose.Schema({
   name : String,
@@ -102,7 +102,6 @@ app.get("/chatHistory", async (req, res) =>{
   const result = await ChatModel.find()
   res.json(result)
 })
-
 
 //============================================= below code good
 app.post("/postFullChatData", async (req, res) =>{

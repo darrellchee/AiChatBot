@@ -32,7 +32,6 @@ function App() {
     get_user_ai_chat(0);
     setHistory_index(0);
     get_ai_name();
-    console.log(AiName)
   }, []);
 
   const get_ai_name = () =>{

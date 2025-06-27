@@ -74,7 +74,6 @@ function Home(){
         .catch(err => console.log("there is an error in launching the chat app: ", err))
     }
 
-
     useEffect(()=>{
         fetch_ai_preset()
     }, [])
@@ -82,6 +81,10 @@ function Home(){
     useEffect(()=>{
         fetch_ai_preset()
     }, [newFieldActive])
+
+        useEffect(()=>{
+        fetch_ai_preset()
+    }, [aiPresets])
 
     useEffect(() =>{
         setTimeout(() =>{
