@@ -98,7 +98,7 @@ function Home(){
     return(
         <div className={HomeCSS.app}>
             <div className={HomeCSS.header}>
-                <h1>Choose our Preset AIs:</h1>
+                <h1>Choose your AI:</h1>
                 <p>im really just a chatgpt wrapper</p>
                 {selectedAi && <h2 className={HomeCSS.selectedAi}>Selected AI: {selectedAi}</h2>}
             </div>
