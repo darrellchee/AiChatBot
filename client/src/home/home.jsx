@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import HomeCSS from "./home.module.css";
 import axios from 'axios';
+require('dotenv').config();
 
 function Home(){
     const [aiPresets , setAiPresets] = useState([])
@@ -15,13 +16,13 @@ function Home(){
     const navigate = useNavigate()
 
     const fetch_ai_preset = () =>{
-        axios.get("http://localhost:4000/getaipresets")
+        axios.get(`${process.env.REACT_APP_API_URL}/getaipresets`)
         .then(res => setAiPresets(res.data.message))
         .catch(err => console.log(err))
     }
 
     const post_new_ai = () =>{
-        axios.post("http://localhost:4000/postaipresets" , {name : newAi.name?.trim(), description : newAi.description})
+        axios.post(`${process.env.REACT_APP_API_URL}/postaipresets` , {name : newAi.name?.trim(), description : newAi.description})
         .then(res => setAiPresets(res.data.message))
         .catch(err => console.log("There is an error in posting the new ai: " + err))
     }
@@ -66,7 +67,7 @@ function Home(){
 
     const launchApp = () =>{
         const ai_input = aiPresets?.findIndex(e => e.name === selectedAi)
-        axios.post("http://localhost:4000/setai" , {name : aiPresets[ai_input].name, description : aiPresets[ai_input].description})
+        axios.post(`${process.env.REACT_APP_API_URL}/setai` , {name : aiPresets[ai_input].name, description : aiPresets[ai_input].description})
         .then(res => {
             console.log(res.data.message)
             navigate('/chat')

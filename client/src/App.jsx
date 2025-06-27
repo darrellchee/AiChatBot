@@ -2,6 +2,7 @@ import React, { useState, useEffect} from "react";
 import './App.css'
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
+require('dotenv').config();
 
 // import llm from "./llm.jsx"
 
@@ -35,14 +36,14 @@ function App() {
   }, []);
 
   const get_ai_name = () =>{
-    axios.get('http://localhost:4000/getAiname')
+    axios.get(`${process.env.REACT_APP_API_URL}/getAiname`)
     .then(res => setAiName(res.data.message))
     .catch(err => console.log(err))
   }
 
   const get_user_ai_chat = (index) =>{
     console.log("user input: ", index)
-    axios.post('http://localhost:4000/getFullChatData', {chat_index : index})
+    axios.post(`${process.env.REACT_APP_API_URL}/getFullChatData`, {chat_index : index})
     .then(res => {
       console.log(res.data)
       setClientSideCache(res.data)
@@ -63,7 +64,7 @@ function App() {
     setInitialUserPrompt(prompt)
     setFrontendData('')
       console.log("front end data: ", FrontendData)
-      axios.post('http://localhost:4000/api', {chat_content : FrontendData.trim(), chat_index : history_index})
+      axios.post(`${process.env.REACT_APP_API_URL}/api`, {chat_content : FrontendData.trim(), chat_index : history_index})
       .then(res => {
         setInitialUserPrompt(null)
         const ai_reply = res.data
@@ -86,7 +87,7 @@ function App() {
   }
   //changes 
   const post_user_ai_chat = (updated) =>{
-    axios.post('http://localhost:4000/postFullChatData', {chat_content : updated, chat_index : history_index})
+    axios.post(`${process.env.REACT_APP_API_URL}/postFullChatData`, {chat_content : updated, chat_index : history_index})
     .then(res => console.log("good response"))
     .catch(err => console.log(err))
   }

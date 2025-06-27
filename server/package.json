@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "run": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,8 @@
     "express": "^5.1.0",
     "mongoose": "^8.14.2",
     "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
