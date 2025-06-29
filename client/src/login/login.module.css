@@ -44,6 +44,22 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
+.inputFieldActive{
+    border-color: red;
+}
+
+.textBelowInputs {
+  position: absolute;      /* right below the input */
+  visibility: hidden;
+}
+
+/* when active, it appears without pushing anything */
+.textBelowInputsActive {
+  visibility: visible;
+  font-size: 1.5vh;
+  color: red;
+}
+
 .checkBoxRow {
   display: flex;
   align-items: center;  

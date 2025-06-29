@@ -4,7 +4,7 @@ const axios = require("axios")
 const app = express()
 const mongoose = require('mongoose')
 require('dotenv').config();
-const PORT = process.env.PORT || 4000
+const PORT = 4000
 
 //legacy client_side object: {client_cache : clientSideCache, history_index : history_index}
 
@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 4000
 
 //{chats : {user_prompts : [user_input], ai_responses : [ai_final_result]}, history : user_input_history} --history object
 
-const history = []
 let selected_ai = {name : "Darrell Chee", description : "You are a helpful cheerfull man"}
 const database_url = process.env.MONGO_URL
 
@@ -55,10 +54,7 @@ const ChatsSchema = new mongoose.Schema({
 
 const ChatModel = mongoose.model("chats", ChatsSchema) //{chat_content: [chats], chat_index : chat_index}
 
-//============================================= below code bad
-
 app.post("/api", async (req, res) =>{
-  //user input is front end data so it will always be a user prompt
   const user_input = req.body.chat_content
   const user_input_index = parseInt(req.body.chat_index, 10)
 
@@ -104,7 +100,6 @@ app.get("/chatHistory", async (req, res) =>{
   res.json(result)
 })
 
-//============================================= below code good
 app.post("/postFullChatData", async (req, res) =>{
   const data = req.body.chat_content
   const index = req.body.chat_index
@@ -143,4 +138,43 @@ app.post("/setai", (req, res) =>{
 
 app.get("/getAiname", (req, res) =>{
   res.json({message : selected_ai.name})
+})
+
+//===================authentication below
+
+const UserSchema = new mongoose.Schema({
+  userName : String,
+  password : String,
+  legalName : String
+})
+
+const UserModel = mongoose.model("users", UserSchema) //{userName: String, password : String}
+
+
+// client json payload {userName : userDetails.username, password : userDetails.password, legalName : userDetails.legalName}
+ app.post('/signup', async(req, res) =>{
+  try{
+    const userName = req.body.userName
+    const password = req.body.password
+    const legalName = req.body.legalName
+    console.log(req.body)
+    const newUSer = await UserModel.create({userName, password, legalName})
+    res.status(201).json(newUSer)
+    console.log(newUSer)
+  }catch(err){
+    res.json(err)
+ }}
+)
+
+app.get('/login', async(req,res) =>{
+  try{
+    const userName = req.body.userName
+    const password = req.body.password
+    const result = await UserModel.findOne(
+      {userName : userName , password : password},
+    );
+    console.log(result)
+  }catch(err){
+    res.json(err)
+  }
 })

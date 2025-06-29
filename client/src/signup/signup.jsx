@@ -1,17 +1,27 @@
 // import React, { useState, useEffect} from "react";
-// import axios from "axios"
 // import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import LoginCSS from "./signup.module.css";
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useState } from "react";
 
 
 function Signup(){
+    const [userDetails, setUserDetails] = useState({});
 
     const navigate = useNavigate()
-
     const handleNagivateChat = () => {
         navigate('/');
+    }
+
+    const handleNewUser = () =>{
+        axios.post(`http://localhost:4000/signup`, {userName : userDetails.username, password : userDetails.password, legalName : userDetails.legalName})
+        .then(res =>{
+            console.log(res.data)
+            handleNagivateChat()
+        })
+        .catch(err => console.log(err))
     }
     
     return(
@@ -29,20 +39,20 @@ function Signup(){
                 <div className="row">
                     <div className={LoginCSS.heading2}>Username:</div>
                     <div>
-                      <textarea className={LoginCSS.inputField} placeholder="KinkaDerp"></textarea>
+                      <textarea className={LoginCSS.inputField} placeholder="KinkaDerp" onChange={e => setUserDetails(prev => ({...prev, username : e.target.value}))} value={userDetails.username}></textarea>
                     </div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Password:</div>
                     <div>
-                        <textarea className={LoginCSS.inputField} placeholder="iloveapples!"></textarea>
+                        <textarea className={LoginCSS.inputField} placeholder="iloveapples!" onChange={e => setUserDetails(prev => ({...prev, password : e.target.value}))} value={userDetails.password}></textarea>
                     </div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Legal Name:</div>
-                    <div><textarea className={LoginCSS.inputField} placeholder="Mylo Sujipto"></textarea></div>
+                    <div><textarea className={LoginCSS.inputField} placeholder="Mylo Sujipto" onChange={e => setUserDetails(prev => ({...prev, legalName : e.target.value}))} value={userDetails.legalName}></textarea></div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
                 <div className="row">
@@ -63,7 +73,7 @@ function Signup(){
                     </div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
-                <div className={LoginCSS.continueButton} onClick={() => handleNagivateChat()}>Continue</div>
+                <div className={LoginCSS.continueButton} onClick={() => handleNewUser()}>Continue</div>
             </div>
         </div>
     )
