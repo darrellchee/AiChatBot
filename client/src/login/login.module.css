@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.mainContainer{
+    height: 100vh;
+    width: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 4vh;
+}
+
+.fieldsContainer{
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* border-color: black;
+    border-style: solid; */
+    height: 60vh;
+    width: 45vh;
+
+}
+
+.heading1 {
+    font-family: monospace;
+    font-size: 4vh;
+}
+
+.heading2{
+    margin-top: 4vh;
+    font-family: monospace;
+    font-size: 2vh;
+}
+
+.partition1{
+    margin-top: 3vh;
+}
+
+.inputField{
+    height: 4vh;
+    justify-content: center;
+    resize: none;
+    border-color: rgb(233, 231, 231);
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.inputFieldActive{
+    border-color: red;
+}
+
+.textBelowInputs {
+  position: absolute;      /* right below the input */
+  visibility: hidden;
+}
+
+/* when active, it appears without pushing anything */
+.textBelowInputsActive {
+  visibility: visible;
+  font-size: 1.5vh;
+  color: red;
+}
+
+.checkBoxRow {
+  display: flex;
+  align-items: center;  
+  gap: 0.7rem;
+}
+
+.para{
+    font-size: 1.5vh;
+    font-family: monospace;
+}
+
+.para1{
+    font-size: 1.5vh;
+    font-family: monospace;
+    margin-bottom: -1.5vh;
+}
+
+.continueButton{
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 1);
+    display: flex;
+    height: 4vh;
+    width: 100%;
+    background-color: rgb(251, 251, 251);
+    font-family: monospace;
+    justify-content: center;
+    align-items: center;
+}
+
+.signUp{
+    margin-top: 1vh;
+    font-family: monospace;
+    cursor: pointer;
+    display: flex;
+    color: rgb(99, 99, 255);
+    align-items: center;
+    font-size: 1.5vh;
+    justify-content: center;
+}

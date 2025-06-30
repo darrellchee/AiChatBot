@@ -43,6 +43,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
 }
 
 .aiPresets{
@@ -88,6 +89,7 @@
     margin: 2vh;
     border-color: red;
     animation: shake 0.5s ease;
+    padding: 0;
 }
 
 @keyframes shake{
@@ -97,7 +99,10 @@
 }
 
 .newAddField{
+    justify-content: center;
+    align-items: center;
     display: block;
+    padding: 0;
 }
 
 .newAddFieldActive{
@@ -113,6 +118,9 @@
 }
 
 .newAiName{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 1vh;
     margin-bottom: 1vh;
     border-color: gray;
@@ -125,9 +133,8 @@
 }
 
 .newAiDesc{
-    height: 19vh;
+    height: 100%;
     margin-top: 1vh;
-    margin-bottom: 1vh;
     border-color: gray;
     border-style: solid;
     border-radius: 15px;

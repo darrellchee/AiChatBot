@@ -83,10 +83,6 @@ function Home(){
         fetch_ai_preset()
     }, [newFieldActive])
 
-        useEffect(()=>{
-        fetch_ai_preset()
-    }, [aiPresets])
-
     useEffect(() =>{
         setTimeout(() =>{
             if(newAierrorField === true){
@@ -107,20 +103,22 @@ function Home(){
                     {aiPresets?.map((preset, idx) =>{
                         const isActive = preset.name === selectedAi;
                         return(
-                            <li key={idx} className={HomeCSS.aiPresets + (isActive ?` ${HomeCSS.aiPresetsActive}` : '')} onClick={() => handleSelectAi(preset.name)}>{preset.name}</li>
+                            <li key={idx} className={HomeCSS.aiPresets + (isActive ?` ${HomeCSS.aiPresetsActive}` : '')} onClick={() => handleSelectAi(preset.name)}><div className="row">{preset.name}</div></li>
                         )
                     })}
                     <li className={(newAierrorField ?` ${HomeCSS.setNewAiErrorField}` : `${HomeCSS.aiPresets}`)} onClick={() => handleNewAi()}>
+                        <div className="row">
                         <p className={HomeCSS.newAddField  + (newFieldActive ?` ${HomeCSS.newAddFieldActive}` : '')}>Click to add</p>
                         <div className={HomeCSS.newAiField  + (newFieldActive ?` ${HomeCSS.newAiFieldActive}` : '')}>
-                            <div>
-                                <p>Give it a name:</p>
-                                <textarea className={HomeCSS.newAiName} ref={nameRef} onChange={e => setNewAi(prev => ({...prev , name : e.target.value}))} onKeyDown={handleDesc} value={newAi.name}></textarea>
+                            <div className="row">
+                            <p>Give it a name:</p>
+                            <textarea className={HomeCSS.newAiName} ref={nameRef} onChange={e => setNewAi(prev => ({...prev , name : e.target.value}))} onKeyDown={handleDesc} value={newAi.name}></textarea>
                             </div>
-                            <div>
-                                <p>Tell it how it behaves:</p>
-                                <textarea className={HomeCSS.newAiDesc} ref={descRef} onChange={e => setNewAi(prev => ({...prev, description : e.target.value}))} onKeyDown={handleSubmit}></textarea>
+                            <div className="row">
+                            <p>Set its behaviour:</p>
+                            <textarea className={HomeCSS.newAiDesc} ref={descRef} onChange={e => setNewAi(prev => ({...prev, description : e.target.value}))} onKeyDown={handleSubmit}></textarea>
                             </div>
+                        </div>
                         </div>
                     </li>
                 </div>
