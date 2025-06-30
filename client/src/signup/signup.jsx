@@ -22,7 +22,7 @@ function Signup(){
     //res.json({ user: { userName: user.userName }, token })
 
     const handleNewUser = () =>{
-        axios.post(`http://localhost:4000/signup`, {userName : userDetails.username, password : userDetails.password, legalName : userDetails.legalName})
+        axios.post(`${process.env.REACT_APP_API_URL}/signup`, {userName : userDetails.username, password : userDetails.password, legalName : userDetails.legalName})
         .then(res =>{
             console.log(res.data)
             handleNagivateChat()

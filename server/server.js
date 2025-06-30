@@ -4,7 +4,7 @@ const axios = require("axios")
 const app = express()
 const mongoose = require('mongoose')
 require('dotenv').config()
-const PORT = 4000
+const PORT = process.env.port ||4000
 const bcrypt = require('bcrypt')
 const jwt    = require('jsonwebtoken')
 const authenticateToken = require('./middleware/authenticate')
