@@ -11,7 +11,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function Signup(){
     const [userDetails, setUserDetails] = useState({});
     const navigate = useNavigate()
-    
+    const [agreeData, setAgreeData] = useState(false);
+    const [agreeDarrell, setAgreeDarrell] = useState(false);
+    const [invalidLogin, setInvalidLogin] = useState(false);
+
+    const canContinue = agreeData && agreeDarrell && userDetails.userName.trim() !== '' && userDetails.password.trim() !== '' && userDetails.legalName.trim() !== '';
+
+
     const handleNagivateChat = () => {
         navigate('/');
     }
@@ -21,14 +27,13 @@ function Signup(){
     }
 
     //res.json({ user: { userName: user.userName }, token })
-
     const handleNewUser = () =>{
-        axios.post(`${process.env.REACT_APP_API_URL}/signup`, {userName : userDetails.username, password : userDetails.password, legalName : userDetails.legalName})
+        axios.post(`${process.env.REACT_APP_API_URL}/signup`, {userName : userDetails.userName, password : userDetails.password, legalName : userDetails.legalName})
         .then(res =>{
             console.log(res.data)
             handleNagivateChat()
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(userDetails))
     }
     
     return(
@@ -46,26 +51,26 @@ function Signup(){
                 <div className="row">
                     <div className={LoginCSS.heading2}>Username:</div>
                     <div>
-                      <textarea className={LoginCSS.inputField} placeholder="KinkaDerp" onChange={e => setUserDetails(prev => ({...prev, username : e.target.value}))} value={userDetails.username}></textarea>
+                      <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => {setUserDetails(prev => ({...prev, userName : e.target.value}))}} value={userDetails.userName || ' '}></textarea>
                     </div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Password:</div>
                     <div>
-                        <textarea className={LoginCSS.inputField} placeholder="iloveapples!" onChange={e => setUserDetails(prev => ({...prev, password : e.target.value}))} value={userDetails.password}></textarea>
+                        <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="Ilikeblue27" onChange={e => {setUserDetails(prev => ({...prev, password : e.target.value}))}} value={userDetails.password || ' '}></textarea>
                     </div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Legal Name:</div>
-                    <div><textarea className={LoginCSS.inputField} placeholder="Mylo Sujipto" onChange={e => setUserDetails(prev => ({...prev, legalName : e.target.value}))} value={userDetails.legalName}></textarea></div>
+                    <div><textarea className={LoginCSS.inputField} placeholder="Mylo Sujipto" onChange={e => {setUserDetails(prev => ({...prev, legalName : e.target.value}))}} value={userDetails.legalName || ' '}></textarea></div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className="col">
                         <div className={LoginCSS.checkBoxRow}>
-                        <input type="checkbox" id="agree1" />
+                        <input type="checkbox" id="agree1" onChange={e => setAgreeData(e.target.checked)}/>
                         <label htmlFor="agree1" className={LoginCSS.para}>My data will be collected</label>
                         </div>
                     </div>
@@ -74,13 +79,13 @@ function Signup(){
                 <div className="row">
                     <div className="col">
                         <div className={LoginCSS.checkBoxRow}>
-                        <input type="checkbox" id="agree1" />
+                        <input type="checkbox" id="agree1" onChange={e => setAgreeDarrell(e.target.checked)} />
                         <label htmlFor="agree1" className={LoginCSS.para}>I agree with Darrell Chee</label>
                         </div>
                     </div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
-                <div className={LoginCSS.continueButton} onClick={() => handleNewUser()}>Continue</div>
+                <button type="button" disabled={!canContinue} className={LoginCSS.continueButton} onClick={() => handleNewUser()}>Continue</button>
                 <div className={LoginCSS.login} onClick={() => handleNagivateLogin()}>Login instead</div>
             </div>
         </div>

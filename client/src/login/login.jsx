@@ -26,7 +26,7 @@ function Login(){
         axios.post(`${process.env.REACT_APP_API_URL}/login`, {userName: userDetail.userName, password: userDetail.password})
             .then(res => {
             const { token } = res.data;
-            if (token) {
+            if(token){
               localStorage.setItem('token', token);
               axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
               handleNagivateChat();

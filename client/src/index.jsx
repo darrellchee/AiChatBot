@@ -7,6 +7,9 @@ import Login from './login/login';
 import Signup from './signup/signup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import Unauthorized from './unauth/Unauthorized';
+import PrivateRoute from './PrivateRoute';
+
 
 // 1a) Pull any existing token from localStorage
 const token = localStorage.getItem('token');
@@ -17,17 +20,18 @@ if (token) {
 
 const router = createBrowserRouter([
     {
-        path : '/', element : <Home/>
-    },
-    {
-        path : '/chat', element : <App/>
-    },
-    {
         path : '/login', element : <Login/>
     },
     {
         path : '/signup', element : <Signup/>
-    }
+    },{ path: '/unauthorized', element: <Unauthorized/> },
+    {
+    element: <PrivateRoute redirectTo="/unauthorized" />,
+    children: [
+      { path: '/',         element: <Home/> },
+      { path: '/chat',     element: <App/> },
+    ]
+  }
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
