@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function Signup(){
     const [userDetails, setUserDetails] = useState({});
     const navigate = useNavigate()
+    
     const handleNagivateChat = () => {
         navigate('/');
     }

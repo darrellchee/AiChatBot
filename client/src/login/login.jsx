@@ -23,7 +23,7 @@ function Login(){
     }
 
     const handleLogin = () =>{
-        axios.post("http://localhost:4000/login", {userName: userDetail.userName, password: userDetail.password})
+        axios.post(`${process.env.REACT_APP_API_URL}/login`, {userName: userDetail.userName, password: userDetail.password})
             .then(res => {
             const { token } = res.data;
             if (token) {
