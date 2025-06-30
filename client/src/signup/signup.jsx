@@ -5,15 +5,21 @@ import LoginCSS from "./signup.module.css";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function Signup(){
     const [userDetails, setUserDetails] = useState({});
-
     const navigate = useNavigate()
     const handleNagivateChat = () => {
         navigate('/');
     }
+
+    const handleNagivateLogin = () => {
+        navigate('/login');
+    }
+
+    //res.json({ user: { userName: user.userName }, token })
 
     const handleNewUser = () =>{
         axios.post(`http://localhost:4000/signup`, {userName : userDetails.username, password : userDetails.password, legalName : userDetails.legalName})
@@ -74,6 +80,7 @@ function Signup(){
                 </div>
                 <div className={LoginCSS.partition1}></div>
                 <div className={LoginCSS.continueButton} onClick={() => handleNewUser()}>Continue</div>
+                <div className={LoginCSS.login} onClick={() => handleNagivateLogin()}>Login instead</div>
             </div>
         </div>
     )

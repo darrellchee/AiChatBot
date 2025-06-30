@@ -3,8 +3,12 @@ const cors = require("cors")
 const axios = require("axios")
 const app = express()
 const mongoose = require('mongoose')
-require('dotenv').config();
+require('dotenv').config()
 const PORT = 4000
+const bcrypt = require('bcrypt')
+const jwt    = require('jsonwebtoken')
+const authenticateToken = require('./middleware/authenticate')
+const JWT_SECRET = process.env.JWT_SECRET
 
 //legacy client_side object: {client_cache : clientSideCache, history_index : history_index}
 
@@ -32,12 +36,12 @@ const AiPresetSchema = new mongoose.Schema({
 
 const AiPresetModel = mongoose.model("aipresets", AiPresetSchema)
 
-app.get("/getaipresets", async (req, res) =>{
+app.get("/getaipresets", authenticateToken, async (req, res) =>{
   const fetched_data = await AiPresetModel.find();
   res.json({message : fetched_data})
 })
 
-app.post("/postaipresets", async (req, res) =>{
+app.post("/postaipresets", authenticateToken, async (req, res) =>{
   try{
     const {name, description} = req.body
     const NewAi = await AiPresetModel.create({name, description})
@@ -54,7 +58,7 @@ const ChatsSchema = new mongoose.Schema({
 
 const ChatModel = mongoose.model("chats", ChatsSchema) //{chat_content: [chats], chat_index : chat_index}
 
-app.post("/api", async (req, res) =>{
+app.post("/api", authenticateToken, async (req, res) =>{
   const user_input = req.body.chat_content
   const user_input_index = parseInt(req.body.chat_index, 10)
 
@@ -90,17 +94,14 @@ app.post("/api", async (req, res) =>{
     res.status(201).json(ai_final_result)
   }catch(err){
     res.status(404).json({error : err})
-  }
-  
-  
-})
+  }})
 
-app.get("/chatHistory", async (req, res) =>{
+app.get("/chatHistory", authenticateToken, async (req, res) =>{
   const result = await ChatModel.find()
   res.json(result)
 })
 
-app.post("/postFullChatData", async (req, res) =>{
+app.post("/postFullChatData", authenticateToken, async (req, res) =>{
   const data = req.body.chat_content
   const index = req.body.chat_index
   try{
@@ -115,7 +116,7 @@ app.post("/postFullChatData", async (req, res) =>{
   }
 })
 
-app.post("/getFullChatData", async (req, res) =>{
+app.post("/getFullChatData", authenticateToken, async (req, res) =>{
   const index = req.body.chat_index
   try{
     const result = await ChatModel.findOne(
@@ -131,50 +132,72 @@ app.post("/getFullChatData", async (req, res) =>{
   }
 })
 
-app.post("/setai", (req, res) =>{
+app.post("/setai", authenticateToken, (req, res) =>{
   selected_ai = {name : req.body.name, description : req.body.description}
   res.status(200).json({message : "ai has been successfully set"})
 })
 
-app.get("/getAiname", (req, res) =>{
+app.get("/getAiname", authenticateToken, (req, res) =>{
   res.json({message : selected_ai.name})
 })
 
 //===================authentication below
-
 const UserSchema = new mongoose.Schema({
-  userName : String,
-  password : String,
-  legalName : String
+  userName    : { type: String, required: true, unique: true },
+  passwordHash: { type: String, required: true },
+  legalName   : { type: String, required: true }
 })
 
 const UserModel = mongoose.model("users", UserSchema) //{userName: String, password : String}
 
-
 // client json payload {userName : userDetails.username, password : userDetails.password, legalName : userDetails.legalName}
- app.post('/signup', async(req, res) =>{
-  try{
-    const userName = req.body.userName
-    const password = req.body.password
-    const legalName = req.body.legalName
-    console.log(req.body)
-    const newUSer = await UserModel.create({userName, password, legalName})
-    res.status(201).json(newUSer)
-    console.log(newUSer)
-  }catch(err){
-    res.json(err)
- }}
-)
+app.post('/signup', async (req, res) => {
+  try {
+    const { userName, password, legalName } = req.body
+    if (!userName || !password || !legalName) {
+      return res.status(400).json({ error: 'All fields required' })
+    }
+    // 1) check existing
+    if (await UserModel.findOne({ userName })) {
+      return res.status(409).json({ error: 'Username taken' })
+    }
+    // 2) hash & save
+    const passwordHash = await bcrypt.hash(password, 10)
+    const newUser = await UserModel.create({ userName, passwordHash, legalName })
+    // 3) issue JWT immediately
+    const token = jwt.sign(
+      { id: newUser._id, userName: newUser.userName },
+      JWT_SECRET,
+      { expiresIn: '2h' }
+    )
+    res.status(201).json({
+      user: { id: newUser._id, userName: newUser.userName, legalName },
+      token
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Signup failed' })
+  }
+})
 
-app.get('/login', async(req,res) =>{
-  try{
-    const userName = req.body.userName
-    const password = req.body.password
-    const result = await UserModel.findOne(
-      {userName : userName , password : password},
-    );
-    console.log(result)
-  }catch(err){
-    res.json(err)
+// LOGIN
+app.post('/login', async (req, res) => {
+  try {
+    const { userName, password } = req.body
+    const user = await UserModel.findOne({ userName })
+    console.log(user)
+    if (!user) return res.status(401).json({ error: 'Invalid credentials' })
+    const valid = await bcrypt.compare(password, user.passwordHash)
+    console.log(valid)
+    if (!valid) return res.status(401).json({ error: 'Invalid credentials' })
+    const token = jwt.sign(
+      { id: user._id, userName: user.userName },
+      JWT_SECRET,
+      { expiresIn: '2h' }
+    )
+    res.json({ user: { userName: user.userName }, token })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Login failed' })
   }
 })

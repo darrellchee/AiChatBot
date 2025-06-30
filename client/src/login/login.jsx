@@ -12,7 +12,7 @@ function Login(){
     const [agreeData, setAgreeData] = useState(false);
     const [agreeDarrell, setAgreeDarrell] = useState(false);
     const navigate = useNavigate()
-    const canContinue = agreeData && agreeDarrell
+    const canContinue = agreeData && agreeDarrell && userDetail.userName.trim() !== '' && userDetail.password.trim() !== '';
     
     const handleNagivateChat = () => {
         navigate('/');
@@ -23,15 +23,19 @@ function Login(){
     }
 
     const handleLogin = () =>{
-        axios.post("http://localhost:4000/signup", {userName : userDetail.userName , password : userDetail.userName})
-        .then(res => {
-            if(res.data){
-                handleNagivateChat()
-            }else{
-                setInvalidLogin(true)
-            }
-        })
-        .catch(err => console.log(err))
+        axios.post("http://localhost:4000/login", {userName: userDetail.userName, password: userDetail.password})
+            .then(res => {
+            const { token } = res.data;
+            if (token) {
+              localStorage.setItem('token', token);
+              axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+              handleNagivateChat();
+            }else {
+              setInvalidLogin(true);
+            }})
+            .catch(err => {
+            setInvalidLogin(true);      
+        });
     }
 
     return(
@@ -49,7 +53,7 @@ function Login(){
                 <div className="row">
                     <div className={LoginCSS.heading2}>Username:</div>
                     <div>
-                      <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => setUserDetail(prev => ({...prev, userName : e.target.value}))}></textarea>
+                      <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => {setUserDetail(prev => ({...prev, userName : e.target.value}))}} value={userDetail.userName || ''}></textarea>
                       <p className={invalidLogin?`${LoginCSS.textBelowInputs} ${LoginCSS.textBelowInputsActive}` :  `${LoginCSS.textBelowInputs}`}>Invalid Credentials</p>
                     </div>
                 </div>
@@ -57,7 +61,7 @@ function Login(){
                 <div className="row">
                     <div className={LoginCSS.heading2}>Password:</div>
                     <div>
-                        <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => setUserDetail(prev => ({...prev, userName : e.target.value}))}></textarea>
+                        <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => {setUserDetail(prev => ({...prev, password : e.target.value}))}} value={userDetail.password || ''}></textarea>
                         <p className={invalidLogin?`${LoginCSS.textBelowInputs} ${LoginCSS.textBelowInputsActive}` : `${LoginCSS.textBelowInputs}`}>Invalid Credentials</p>
                     </div>
                 </div>
