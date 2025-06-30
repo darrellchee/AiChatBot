@@ -44,6 +44,25 @@ function App() {
     getAiName();
   }, []);
 
+  const handleDeleteChat = (index) => {
+    if (index < 0 || index >= chatHistories.length) {
+      console.error("Invalid chat index");
+      return;
+    }
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/deleteChat`, { chat_index: index })
+      .then(() => {
+        setChatHistories((prev) => prev.filter((h) => h.chat_index !== index));
+        if (historyIndex === index) {
+          setFrontendData("");
+          setClientSideCache([]);
+          setHistoryIndex(0);
+          getUserAiChat(0);
+        }
+      })
+      .catch(console.error);
+  }
+
   const postApi = () => {
     const prompt = FrontendData.trim();
     if (!prompt) return;
@@ -110,12 +129,10 @@ function App() {
       </div>
 
       <div className="side-bar">
-        <h1 className="side-bar-header">
-          Chats:{" "}
-          <div className="new-chat-icon" onClick={handleNewChat}>
-            +
-          </div>
-        </h1>
+        <div className="side-bar-buttons">
+          <div className="new-chat-icon" onClick={handleNewChat}>Make New Chat</div>
+          <div className="new-chat-icon" onClick={() => handleDeleteChat(historyIndex)}>Delete Current Chat</div>
+        </div>
         <div id="responses">
           {chatHistories.map((h) => (
             <p
@@ -159,7 +176,7 @@ function App() {
               id="footer-search-bar-body"
               placeholder="Ask anything"
               value={FrontendData}
-              maxLength={1000}
+              maxLength={700}
               onChange={(e) => setFrontendData(e.target.value)}
               onKeyDown={handleSubmit}
             />

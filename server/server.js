@@ -60,6 +60,25 @@ const ChatsSchema = new mongoose.Schema({
 });
 const ChatModel = mongoose.model("chats", ChatsSchema);
 
+app.post("/deleteChat", authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+  const idx = parseInt(req.body.chat_index, 10);
+  if (isNaN(idx)) {
+    return res.status(400).json({ error: "Invalid chat index" });
+  }
+  try {
+    const result = await ChatModel.deleteOne({ userId, chat_index: idx });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "Chat not found" });
+    } else {
+      res.status(200).json({ message: "Chat deleted successfully" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.post("/api", authenticateToken, async (req, res) => {
   const prompt   = req.body.chat_content;
   const idx      = parseInt(req.body.chat_index, 10);
