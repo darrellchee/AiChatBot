@@ -4,6 +4,7 @@ import HomeCSS from "./home.module.css";
 import axios from 'axios';
 
 
+
 function Home(){
     const [aiPresets , setAiPresets] = useState([])
     const [selectedAi, setSelectedAi] = useState(null)
@@ -34,6 +35,10 @@ function Home(){
         }
     }
 
+    const handleLogout = () =>{
+        navigate('/login');
+    }
+
     const handleSelectAi = (input) =>{
         if(selectedAi == input){
             setSelectedAi(null)
@@ -51,6 +56,7 @@ function Home(){
             if(name && des && !unique){
                 post_new_ai()
                 setnewFieldActive(false)
+                fetch_ai_preset()
             }else{
                 setnewAierrorField(true)
                 nameRef.current.focus();
@@ -94,6 +100,7 @@ function Home(){
     return(
         <div className={HomeCSS.app}>
             <div className={HomeCSS.header}>
+                <div className={HomeCSS.logout} onClick={e => handleLogout()}>Log out</div>
                 <h1>Choose your AI:</h1>
                 <p>im really just a chatgpt wrapper</p>
                 {selectedAi && <h2 className={HomeCSS.selectedAi}>Selected AI: {selectedAi}</h2>}
@@ -126,7 +133,6 @@ function Home(){
             </div>
         </div>
     )
-    // newAi = {name: '', description:''}
 
 }
 

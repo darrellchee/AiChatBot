@@ -133,6 +133,7 @@
 }
 
 .ai-response{
+  white-space: pre-wrap;
   width: fit-content;
   align-self: center;
   border-style: solid;
@@ -148,6 +149,7 @@
 }
 
 .user-prompt {
+  white-space: pre-wrap;
   width: fit-content;
   max-width: 60vh;
   padding: 10px;

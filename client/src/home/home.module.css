@@ -16,6 +16,19 @@
     overflow-y: auto;
 }
 
+.logout{
+    position: absolute;
+    top: 2vh;
+    right: 2vh;
+    cursor: pointer;
+    padding: 1vh;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    font-size: 1.5vh;
+    font-family: monospace;
+}
+
+
 .header{
     height: 20vh;
     position: relative;
