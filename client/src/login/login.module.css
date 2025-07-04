@@ -2,7 +2,7 @@
 
 .mainContainer{
     height: 100vh;
-    width: 100vh;
+    width: 100vw;
     align-items: center;
     justify-content: center;
     padding: 4vh;
@@ -18,6 +18,13 @@
     height: 60vh;
     width: 45vh;
 
+}
+
+@media (max-width: 600px) {
+    .fieldsContainer{
+        width: 90vw;
+        height: auto;
+    }
 }
 
 .heading1 {
