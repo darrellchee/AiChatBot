@@ -36,7 +36,7 @@ const AiPresetModel = mongoose.model("AiPreset", AiPresetSchema, "aipresets");
 
 app.get("/getaipresets", authenticateToken, async (req, res) => {
   const fetched = await AiPresetModel.find();
-  res.json({ message: fetched });
+  res.json({message : { aipresets: fetched , userName : req.user.userName}});
 });
 
 app.post("/postaipresets", authenticateToken, async (req, res) => {

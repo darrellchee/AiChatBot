@@ -67,7 +67,6 @@ export default function Login() {
                         <p className={LoginCSS.para1}>Please Login</p>
                     </div>
                 </div>
-                <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Username:</div>
                     <div>
@@ -75,7 +74,6 @@ export default function Login() {
                       <p className={invalidLogin?`${LoginCSS.textBelowInputs} ${LoginCSS.textBelowInputsActive}` :  `${LoginCSS.textBelowInputs}`}>Invalid Credentials</p>
                     </div>
                 </div>
-                <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Password:</div>
                     <div>

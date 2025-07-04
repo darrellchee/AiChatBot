@@ -124,7 +124,7 @@ function App() {
     <div className="app">
       <div className="header">
         <p className="ai-name" onClick={() => navigate("/")}>
-          Selected AI: {AiName} (click to go back)
+          Selected AI: {AiName} (click to repick ai)
         </p>
       </div>
 

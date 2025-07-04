@@ -7,6 +7,7 @@ import HomeCSS from "./home.module.css";
 import Login from "../login/login";
 
 function Home() {
+  const [userName, setUserName] = useState('');
   const [aiPresets, setAiPresets] = useState([]);
   const [selectedAi, setSelectedAi] = useState(null);
   const [selectedAiDesc, setSelectedAiDesc] = useState(null);
@@ -22,7 +23,10 @@ function Home() {
   const fetchAiPresets = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/getaipresets`)
-      .then((res) => setAiPresets(res.data.message))
+      .then((res) => {
+        setAiPresets(res.data.message.aipresets)
+        setUserName(res.data.message.userName)
+    })
       .catch((err) => console.log(err));
   };
 
@@ -125,10 +129,10 @@ const handleSelectAi = (preset) => {
   return (
         <div className={HomeCSS.app}>
             <div className={HomeCSS.header}>
-                <div className={HomeCSS.logout} onClick={e => handleLogout()}>Log out</div>
+                <div className={HomeCSS.headerHeader}><p className={HomeCSS.headerHeaderp}>Logged in as {userName}</p><div className={HomeCSS.logout} onClick={e => handleLogout()}>Log out</div></div>
                 <h1>Choose your AI:</h1>
                 <p>im really just a chatgpt wrapper</p>
-                {selectedAi && <h2 className={HomeCSS.selectedAi}>Selected AI: {selectedAi}</h2>}
+                {selectedAi && <h3 className={HomeCSS.selectedAi}>Selected AI: {selectedAi}<p className={HomeCSS.selectedAip}>Scroll Down Please</p></h3> }
             </div>
             <div className={HomeCSS.body}>
                 <div className={HomeCSS.ai_preset_container}>
@@ -143,12 +147,10 @@ const handleSelectAi = (preset) => {
                         <p className={HomeCSS.newAddField  + (newFieldActive ?` ${HomeCSS.newAddFieldActive}` : '')}>Click to add</p>
                         <div className={HomeCSS.newAiField  + (newFieldActive ?` ${HomeCSS.newAiFieldActive}` : '')}>
                             <div className="row">
-                            <p>Give it a name:</p>
-                            <textarea className={HomeCSS.newAiName} ref={nameRef} onChange={e => setNewAi(prev => ({...prev , name : e.target.value}))} onKeyDown={handleDesc} value={newAi.name}></textarea>
-                            </div>
-                            <div className="row">
-                            <p>Set its behaviour:</p>
-                            <textarea className={HomeCSS.newAiDesc} ref={descRef} onChange={e => setNewAi(prev => ({...prev, description : e.target.value}))} onKeyDown={handleSubmit}></textarea>
+                            <p className={HomeCSS.aitext}>Give it a name:</p>
+                            <input type="text" className={HomeCSS.newAiName} ref={nameRef} onChange={e => setNewAi(prev => ({...prev , name : e.target.value}))} onKeyDown={handleDesc} value={newAi.name}></input>
+                            <p className={HomeCSS.aitext}>Set its behaviour (press enter):</p>
+                            <textarea  className={HomeCSS.newAiDesc} ref={descRef} onChange={e => setNewAi(prev => ({...prev, description : e.target.value}))} onKeyDown={handleSubmit}></textarea>
                             </div>
                         </div>
                         </div>

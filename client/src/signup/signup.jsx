@@ -47,21 +47,18 @@ function Signup(){
                         <p className={LoginCSS.para1}>Please Signup</p>
                     </div>
                 </div>
-                <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Username:</div>
                     <div>
                       <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => {setUserDetails(prev => ({...prev, userName : e.target.value}))}} value={userDetails.userName || ''}></textarea>
                     </div>
                 </div>
-                <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Password:</div>
                     <div>
                         <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="Ilikeblue27" onChange={e => {setUserDetails(prev => ({...prev, password : e.target.value}))}} value={userDetails.password || ''}></textarea>
                     </div>
                 </div>
-                <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Legal Name:</div>
                     <div><textarea className={LoginCSS.inputField} placeholder="Mylo Sujipto" onChange={e => {setUserDetails(prev => ({...prev, legalName : e.target.value}))}} value={userDetails.legalName || ''}></textarea></div>
