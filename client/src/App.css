@@ -22,7 +22,7 @@
   flex-direction: column;
 }
 
-.ai-name{
+.selected-ai{
   border: solid;
   border-width: 1px;
   border-color: black;
@@ -30,11 +30,38 @@
   padding: 1vh;
   cursor: pointer;
   margin-left: 8vh;
-  font-family: monospace; 
+  font-family: monospace;
   font-weight: bold;
   font-size: 2vh;
   color: rgb(66, 66, 66);
 }
+
+.hamburger-icon {
+  display: none;
+  width: 5vh;
+  height: 4vh;
+  margin-top: 1vh;
+  margin-left: 8vh;
+  cursor: pointer;
+  background-color: #fafafa;
+  border: 1px solid black;
+  border-radius: 5px;
+  position: relative;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after,
+.hamburger-icon div {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: black;
+}
+.hamburger-icon::before { top: 25%; }
+.hamburger-icon div { top: 50%; }
+.hamburger-icon::after { top: 75%; }
 
 .new-chat-icon{
   display: flex;
@@ -258,10 +285,24 @@
     height: 100vh;
   }
   .side-bar {
-    order: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
     width: 100%;
-    border-left: none;
-    border-top: 1px solid #dcdcdc;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 10;
+    overflow-y: auto;
+  }
+  .side-bar.open {
+    transform: translateX(0);
+  }
+  .hamburger-icon {
+    display: block;
+  }
+  .selected-ai {
+    margin-left: 2vh;
   }
   .body {
     order: 2;
