@@ -31,7 +31,7 @@ function Signup(){
         axios.post(`${process.env.REACT_APP_API_URL}/signup`, {userName : userDetails.userName, password : userDetails.password, legalName : userDetails.legalName})
         .then(res =>{
             console.log(res.data)
-            handleNagivateChat()
+            handleNagivateLogin()
         })
         .catch(err => console.log(userDetails))
     }
