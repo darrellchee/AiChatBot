@@ -27,14 +27,31 @@ function Signup(){
     }
 
     //res.json({ user: { userName: user.userName }, token })
-    const handleNewUser = () =>{
-        axios.post(`${process.env.REACT_APP_API_URL}/signup`, {userName : userDetails.userName, password : userDetails.password, legalName : userDetails.legalName})
-        .then(res =>{
-            console.log(res.data)
-            handleNagivateLogin()
-        })
-        .catch(err => console.log(userDetails))
-    }
+    const handleNewUser = () => {
+    axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
+        userName: userDetails.userName,
+        password: userDetails.password,
+        legalName: userDetails.legalName
+    })
+    .then(res => {
+        const { token } = res.data;
+        if (token) {
+        // store & set the JWT
+        localStorage.setItem('token', token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        // go straight to the app (bypassing login)
+        navigate('/', { replace: true });
+        } else {
+        // if you want, flag an error here
+        setInvalidLogin(true);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        setInvalidLogin(true);
+    });
+    };
+
     
     return(
         <div className={LoginCSS.mainContainer}>
