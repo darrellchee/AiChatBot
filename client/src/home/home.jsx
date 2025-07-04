@@ -4,10 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import HomeCSS from "./home.module.css";
+import Login from "../login/login";
 
 function Home() {
   const [aiPresets, setAiPresets] = useState([]);
   const [selectedAi, setSelectedAi] = useState(null);
+  const [selectedAiDesc, setSelectedAiDesc] = useState(null);
+  const [SelectedAiAuthor, setSelectedAiAuthor] = useState(null);
   const [newAi, setNewAi] = useState({});
   const [newFieldActive, setNewFieldActive] = useState(false);
   const [newAiErrorField, setNewAiErrorField] = useState(false);
@@ -39,7 +42,9 @@ function Home() {
   // Handler to show the “add new” fields
   const handleNewAi = () => {
     setNewFieldActive(true);
-    if (selectedAi) setSelectedAi(null);
+    setSelectedAi(null);
+    setSelectedAiDesc(null);
+    setSelectedAiAuthor(null);
   };
 
   // **Logout** handler
@@ -53,9 +58,19 @@ function Home() {
   };
 
   // Select/deselect an AI
-  const handleSelectAi = (name) => {
-    setSelectedAi((prev) => (prev === name ? null : name));
-  };
+const handleSelectAi = (preset) => {
+  if (selectedAi === preset.name) {
+    // you clicked the same one → clear everything
+    setSelectedAi(null);
+    setSelectedAiDesc(null);
+    setSelectedAiAuthor(null);
+  } else {
+    // you clicked a new one → set all three together
+    setSelectedAi(preset.name);
+    setSelectedAiDesc(preset.description);
+    setSelectedAiAuthor(preset.author);
+  }
+};
 
   // Enter submits new AI
   const handleSubmit = (e) => {
@@ -120,7 +135,7 @@ function Home() {
                     {aiPresets?.map((preset, idx) =>{
                         const isActive = preset.name === selectedAi;
                         return(
-                            <li key={idx} className={HomeCSS.aiPresets + (isActive ?` ${HomeCSS.aiPresetsActive}` : '')} onClick={() => handleSelectAi(preset.name)}><div className="row">{preset.name}</div></li>
+                            <li key={idx} className={HomeCSS.aiPresets + (isActive ?` ${HomeCSS.aiPresetsActive}` : '')} onClick={() => handleSelectAi(preset)}><div className="row">{preset.name}</div></li>
                         )
                     })}
                     <li className={(newAiErrorField ?` ${HomeCSS.setNewAiErrorField}` : `${HomeCSS.aiPresets}`)} onClick={() => handleNewAi()}>
@@ -139,6 +154,8 @@ function Home() {
                         </div>
                     </li>
                 </div>
+                {selectedAiDesc && <h2 className={HomeCSS.aiDescText}>Description: {selectedAiDesc}</h2>}
+                {SelectedAiAuthor && <h2 className={HomeCSS.aiAuthText}>Made by: {SelectedAiAuthor}</h2>}
                 <div className={HomeCSS.submitbutton + (selectedAi ?` ${HomeCSS.submitbuttonActive}` : '')} onClick={() => launchApp()}>Submit</div>
             </div>
         </div>

@@ -29,8 +29,10 @@ mongoose
 const AiPresetSchema = new mongoose.Schema({
   name: String,
   description: String,
+  author: String
 });
-const AiPresetModel = mongoose.model("aipresets", AiPresetSchema);
+
+const AiPresetModel = mongoose.model("AiPreset", AiPresetSchema, "aipresets");
 
 app.get("/getaipresets", authenticateToken, async (req, res) => {
   const fetched = await AiPresetModel.find();
@@ -40,7 +42,8 @@ app.get("/getaipresets", authenticateToken, async (req, res) => {
 app.post("/postaipresets", authenticateToken, async (req, res) => {
   try {
     const { name, description } = req.body;
-    const newAi = await AiPresetModel.create({ name, description });
+    const author = req.user.userName
+    const newAi = await AiPresetModel.create({ name : name, description : description, author : author });
     res.status(201).json(newAi);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -84,6 +87,7 @@ app.post("/api", authenticateToken, async (req, res) => {
   const idx      = parseInt(req.body.chat_index, 10);
   const userId   = req.user.id;
   const userName = req.user.userName;
+  
   if(prompt.length > 800) {
     return res.status(400).json({ error: "Prompt cannot be that long" });
   }
@@ -166,7 +170,6 @@ app.post("/postFullChatData", authenticateToken, async (req, res) => {
 app.post("/getFullChatData", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const idx    = parseInt(req.body.chat_index, 10);
-
   try {
     const doc = await ChatModel.findOne(
       { userId, chat_index: idx },
