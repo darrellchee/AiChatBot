@@ -7,6 +7,13 @@ import { useState } from "react";
 
 
 function Login(){
+
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
+    // …after login success:
+    navigate(from, { replace: true });
+
+
     const [userDetail, setUserDetail] = useState({})
     const [invalidLogin, setInvalidLogin] = useState(false);
     const [agreeData, setAgreeData] = useState(false);
