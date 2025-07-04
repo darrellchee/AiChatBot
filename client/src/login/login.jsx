@@ -2,12 +2,11 @@
 import axios from "axios"
 // import { useNavigate } from "react-router-dom";
 import LoginCSS from "./login.module.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from "react";
 
 
 function Login(){
-
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
     // …after login success:
