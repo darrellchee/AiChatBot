@@ -55,37 +55,37 @@ function Signup(){
     
     return(
         <div className={LoginCSS.mainContainer}>
-            <div className={LoginCSS.heading1}>Please signup</div>
-            <div className={LoginCSS.heading1}>please</div>
+            <div className={LoginCSS.heading1}>Happy to</div>
+            <div className={LoginCSS.heading1}>see you</div>
             <div className={LoginCSS.fieldsContainer}>
                 <div className="row">
                     <div className="col">
-                        <div className={LoginCSS.heading1}>Welcome, Sorry</div>
+                        <div className={LoginCSS.heading1}>Nice to meet you!</div>
                         <p className={LoginCSS.para1}>Please Signup</p>
                     </div>
                 </div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Username:</div>
                     <div>
-                      <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => {setUserDetails(prev => ({...prev, userName : e.target.value}))}} value={userDetails.userName || ''}></textarea>
+                      <input type="text" className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="Darrell" onChange={e => {setUserDetails(prev => ({...prev, userName : e.target.value}))}} value={userDetails.userName || ''}></input>
                     </div>
                 </div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Password:</div>
                     <div>
-                        <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="Ilikeblue27" onChange={e => {setUserDetails(prev => ({...prev, password : e.target.value}))}} value={userDetails.password || ''}></textarea>
+                        <input type="password" className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="********" onChange={e => {setUserDetails(prev => ({...prev, password : e.target.value}))}} value={userDetails.password || ''}></input>
                     </div>
                 </div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Legal Name:</div>
-                    <div><textarea className={LoginCSS.inputField} placeholder="Mylo Sujipto" onChange={e => {setUserDetails(prev => ({...prev, legalName : e.target.value}))}} value={userDetails.legalName || ''}></textarea></div>
+                    <div><input type="text" className={LoginCSS.inputField} placeholder="Samuel Jason Firmanysah" onChange={e => {setUserDetails(prev => ({...prev, legalName : e.target.value}))}} value={userDetails.legalName || ''}></input></div>
                 </div>
                 <div className={LoginCSS.partition1}></div>
                 <div className="row">
                     <div className="col">
                         <div className={LoginCSS.checkBoxRow}>
                         <input type="checkbox" id="agree1" onChange={e => setAgreeData(e.target.checked)}/>
-                        <label htmlFor="agree1" className={LoginCSS.para}>My data will be collected</label>
+                        <label htmlFor="agree1" className={LoginCSS.para}>Log in data will be encrypted</label>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@ function Signup(){
                     <div className="col">
                         <div className={LoginCSS.checkBoxRow}>
                         <input type="checkbox" id="agree1" onChange={e => setAgreeDarrell(e.target.checked)} />
-                        <label htmlFor="agree1" className={LoginCSS.para}>I agree with Darrell Chee</label>
+                        <label htmlFor="agree1" className={LoginCSS.para}>My chat data will be collected</label>
                         </div>
                     </div>
                 </div>

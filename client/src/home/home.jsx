@@ -130,8 +130,8 @@ const handleSelectAi = (preset) => {
         <div className={HomeCSS.app}>
             <div className={HomeCSS.header}>
                 <div className={HomeCSS.headerHeader}><p className={HomeCSS.headerHeaderp}>Logged in as {userName}</p><div className={HomeCSS.logout} onClick={e => handleLogout()}>Log out</div></div>
-                <h1>Choose your AI:</h1>
-                <p>im really just a chatgpt wrapper</p>
+                <h1>Choose Who to Talk to</h1>
+                <p>Powered by AI</p>
                 {selectedAi && <h3 className={HomeCSS.selectedAi}>Selected AI: {selectedAi}<p className={HomeCSS.selectedAip}>Scroll Down Please</p></h3> }
             </div>
             <div className={HomeCSS.body}>

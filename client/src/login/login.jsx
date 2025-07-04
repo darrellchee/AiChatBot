@@ -58,26 +58,26 @@ export default function Login() {
   // 5️⃣ And finally your JSX
     return (
         <div className={LoginCSS.mainContainer}>
-            <div className={LoginCSS.heading1}>Sorry for</div>
-            <div className={LoginCSS.heading1}>your time</div>
+            <div className={LoginCSS.heading1}>Glad to see</div>
+            <div className={LoginCSS.heading1}>you back here</div>
             <div className={LoginCSS.fieldsContainer}>
                 <div className="row">
                     <div className="col">
-                        <div className={LoginCSS.heading1}>Welcome, Sorry</div>
+                        <div className={LoginCSS.heading1}>Welcome Back!</div>
                         <p className={LoginCSS.para1}>Please Login</p>
                     </div>
                 </div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Username:</div>
                     <div>
-                      <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => {setUserDetail(prev => ({...prev, userName : e.target.value}))}} value={userDetail.userName || ''}></textarea>
+                      <input type="text" className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="Darrell" onChange={e => {setUserDetail(prev => ({...prev, userName : e.target.value}))}} value={userDetail.userName || ''}></input>
                       <p className={invalidLogin?`${LoginCSS.textBelowInputs} ${LoginCSS.textBelowInputsActive}` :  `${LoginCSS.textBelowInputs}`}>Invalid Credentials</p>
                     </div>
                 </div>
                 <div className="row">
                     <div className={LoginCSS.heading2}>Password:</div>
                     <div>
-                        <textarea className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="DarrellChee123" onChange={e => {setUserDetail(prev => ({...prev, password : e.target.value}))}} value={userDetail.password || ''}></textarea>
+                        <input type="password" className={invalidLogin?`${LoginCSS.inputField} ${LoginCSS.inputFieldActive}` : `${LoginCSS.inputField}`} placeholder="********" onChange={e => {setUserDetail(prev => ({...prev, password : e.target.value}))}} value={userDetail.password || ''}></input>
                         <p className={invalidLogin?`${LoginCSS.textBelowInputs} ${LoginCSS.textBelowInputsActive}` : `${LoginCSS.textBelowInputs}`}>Invalid Credentials</p>
                     </div>
                 </div>
@@ -86,7 +86,7 @@ export default function Login() {
                     <div className="col">
                         <div className={LoginCSS.checkBoxRow}>
                         <input type="checkbox" id="agree1" onChange={e => setAgreeData(e.target.checked)}/>
-                        <label htmlFor="agree1" className={LoginCSS.para}>My data will be collected</label>
+                        <label htmlFor="agree1" className={LoginCSS.para}>Log in data will be encrypted</label>
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ export default function Login() {
                     <div className="col">
                         <div className={LoginCSS.checkBoxRow}>
                         <input type="checkbox" id="agree2" onChange={e => setAgreeDarrell(e.target.checked)} />
-                        <label htmlFor="agree2" className={LoginCSS.para}>I agree with Darrell Chee</label>
+                        <label htmlFor="agree2" className={LoginCSS.para}>My chat data will be collected</label>
                         </div>
                     </div>
                 </div>

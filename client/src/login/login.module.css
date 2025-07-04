@@ -42,13 +42,17 @@
     margin-top: 3vh;
 }
 
-.inputField{
-    height: 4vh;
-    justify-content: center;
-    resize: none;
-    border-color: rgb(233, 231, 231);
-    width: 100%;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+.inputField {
+  box-sizing: border-box;
+  width: 100%;
+  height: 4vh;                  /* same as before */
+  line-height: 4vh;             /* vertically center the text */
+  padding: 0 0.75rem;           /* adjust as needed for left/right inset */
+  border: 1px solid rgb(233,231,231);
+  border-radius: 4px;           /* if your textarea had rounded corners */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  background: white;            /* match textarea background */
+  font: inherit;                /* inherit font-family/size from parent */
 }
 
 .inputFieldActive{

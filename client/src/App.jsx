@@ -133,7 +133,7 @@ function App() {
   return (
     <div className="app">
       <div className="header">
-        <p className="selected-ai" onClick={() => navigate("/")}>Selected AI: {AiName}</p>
+        <p className="selected-ai" onClick={() => navigate("/")}>Selected AI: {AiName} (click me to go back)</p>
         <div className="hamburger-icon" onClick={handleHamburgerClick}>
           <div></div>
         </div>
@@ -185,7 +185,7 @@ function App() {
           <div id="footer-search-bar">
             <textarea
               id="footer-search-bar-body"
-              placeholder="Ask anything"
+              placeholder="Type anything you want"
               value={FrontendData}
               maxLength={700}
               onChange={(e) => setFrontendData(e.target.value)}
