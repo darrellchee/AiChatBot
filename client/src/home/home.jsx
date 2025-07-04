@@ -108,103 +108,40 @@ function Home() {
   }, [newAiErrorField]);
 
   return (
-    <div className={HomeCSS.app}>
-      <header className={HomeCSS.header}>
-        <button
-          type="button"
-          className={HomeCSS.logout}
-          onClick={handleLogout}
-        >
-          Log out
-        </button>
-        <h1>Choose your AI:</h1>
-        <p>I'm really just a ChatGPT wrapper</p>
-        {selectedAi && (
-          <h2 className={HomeCSS.selectedAi}>Selected AI: {selectedAi}</h2>
-        )}
-      </header>
-
-      <div className={HomeCSS.body}>
-        <ul className={HomeCSS.aiPresetContainer}>
-          {aiPresets.map((preset, idx) => {
-            const isActive = preset.name === selectedAi;
-            return (
-              <li
-                key={idx}
-                className={
-                  HomeCSS.aiPresets +
-                  (isActive ? ` ${HomeCSS.aiPresetsActive}` : "")
-                }
-                onClick={() => handleSelectAi(preset.name)}
-              >
-                <div className="row">{preset.name}</div>
-              </li>
-            );
-          })}
-
-          <li
-            className={
-              newAiErrorField
-                ? ` ${HomeCSS.setNewAiErrorField}`
-                : `${HomeCSS.aiPresets}`
-            }
-            onClick={handleNewAi}
-          >
-            <div className="row">
-              <p
-                className={
-                  HomeCSS.newAddField +
-                  (newFieldActive ? ` ${HomeCSS.newAddFieldActive}` : "")
-                }
-              >
-                Click to add
-              </p>
-              <div
-                className={
-                  HomeCSS.newAiField +
-                  (newFieldActive ? ` ${HomeCSS.newAiFieldActive}` : "")
-                }
-              >
-                <div className="row">
-                  <p>Give it a name:</p>
-                  <textarea
-                    className={HomeCSS.newAiName}
-                    ref={nameRef}
-                    onChange={(e) =>
-                      setNewAi((p) => ({ ...p, name: e.target.value }))
-                    }
-                    onKeyDown={handleDesc}
-                    value={newAi.name || ""}
-                  />
-                </div>
-                <div className="row">
-                  <p>Set its behaviour:</p>
-                  <textarea
-                    className={HomeCSS.newAiDesc}
-                    ref={descRef}
-                    onChange={(e) =>
-                      setNewAi((p) => ({ ...p, description: e.target.value }))
-                    }
-                    onKeyDown={handleSubmit}
-                    value={newAi.description || ""}
-                  />
-                </div>
-              </div>
+        <div className={HomeCSS.app}>
+            <div className={HomeCSS.header}>
+                <div className={HomeCSS.logout} onClick={e => handleLogout()}>Log out</div>
+                <h1>Choose your AI:</h1>
+                <p>im really just a chatgpt wrapper</p>
+                {selectedAi && <h2 className={HomeCSS.selectedAi}>Selected AI: {selectedAi}</h2>}
             </div>
-          </li>
-        </ul>
-
-        <div
-          className={
-            HomeCSS.submitButton +
-            (selectedAi ? ` ${HomeCSS.submitButtonActive}` : "")
-          }
-          onClick={launchApp}
-        >
-          Submit
+            <div className={HomeCSS.body}>
+                <div className={HomeCSS.ai_preset_container}>
+                    {aiPresets?.map((preset, idx) =>{
+                        const isActive = preset.name === selectedAi;
+                        return(
+                            <li key={idx} className={HomeCSS.aiPresets + (isActive ?` ${HomeCSS.aiPresetsActive}` : '')} onClick={() => handleSelectAi(preset.name)}><div className="row">{preset.name}</div></li>
+                        )
+                    })}
+                    <li className={(newAierrorField ?` ${HomeCSS.setNewAiErrorField}` : `${HomeCSS.aiPresets}`)} onClick={() => handleNewAi()}>
+                        <div className="row">
+                        <p className={HomeCSS.newAddField  + (newFieldActive ?` ${HomeCSS.newAddFieldActive}` : '')}>Click to add</p>
+                        <div className={HomeCSS.newAiField  + (newFieldActive ?` ${HomeCSS.newAiFieldActive}` : '')}>
+                            <div className="row">
+                            <p>Give it a name:</p>
+                            <textarea className={HomeCSS.newAiName} ref={nameRef} onChange={e => setNewAi(prev => ({...prev , name : e.target.value}))} onKeyDown={handleDesc} value={newAi.name}></textarea>
+                            </div>
+                            <div className="row">
+                            <p>Set its behaviour:</p>
+                            <textarea className={HomeCSS.newAiDesc} ref={descRef} onChange={e => setNewAi(prev => ({...prev, description : e.target.value}))} onKeyDown={handleSubmit}></textarea>
+                            </div>
+                        </div>
+                        </div>
+                    </li>
+                </div>
+                <div className={HomeCSS.submitbutton + (selectedAi ?` ${HomeCSS.submitbuttonActive}` : '')} onClick={() => launchApp()}>Submit</div>
+            </div>
         </div>
-      </div>
-    </div>
   );
 }
 
