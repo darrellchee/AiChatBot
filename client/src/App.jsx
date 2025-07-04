@@ -9,6 +9,7 @@ function App() {
   const [FrontendData, setFrontendData]   = useState("");
   const [historyIndex, setHistoryIndex]   = useState(0);
   const [AiName, setAiName]               = useState("");
+  const [isSidebarOpen, setSidebarOpen]   = useState(false);
   const navigate                          = useNavigate();
 
   // load all history indexes
@@ -115,20 +116,30 @@ function App() {
     setClientSideCache([]);
   };
 
+  const handleHamburgerClick = () => {
+    setSidebarOpen(true);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   const handleGetPreviousChat = (idx) => {
     setHistoryIndex(idx);
     getUserAiChat(idx);
+    setSidebarOpen(false);
   };
 
   return (
     <div className="app">
       <div className="header">
-        <p className="ai-name" onClick={() => navigate("/")}>
-          Selected AI: {AiName} (click to repick ai)
-        </p>
+        <p className="selected-ai" onClick={() => navigate("/")}>Selected AI: {AiName}</p>
+        <div className="hamburger-icon" onClick={handleHamburgerClick}>
+          <div></div>
+        </div>
       </div>
 
-      <div className="side-bar">
+      <div className={`side-bar ${isSidebarOpen ? "open" : ""}`}>
         <div className="side-bar-buttons">
           <div className="new-chat-icon" onClick={handleNewChat}>Make New Chat</div>
           <div className="new-chat-icon" onClick={() => handleDeleteChat(historyIndex)}>Delete Current Chat</div>
