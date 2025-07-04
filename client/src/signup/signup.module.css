@@ -1,34 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-.mainContainer{
+.mainContainer {
     height: 100vh;
-    width: 100vh;
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4vh;
+    padding: 2rem;
 }
 
-.fieldsContainer{
-    transform: translate(-50%, -50%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    /* border-color: black;
-    border-style: solid; */
-    height: 60vh;
-    width: 45vh;
-
+.fieldsContainer {
+    width: 100%;
+    max-width: 400px;
 }
 
 .heading1 {
-    font-family: monospace;
-    font-size: 4vh;
+    font-size: 2rem;
 }
 
-.heading2{
-    margin-top: 4vh;
-    font-family: monospace;
-    font-size: 2vh;
+.heading2 {
+    margin-top: 1rem;
+    font-size: 1rem;
 }
 
 .partition1{
@@ -50,36 +40,38 @@
   gap: 0.7rem;
 }
 
-.para{
-    font-size: 1.5vh;
-    font-family: monospace;
+.para {
+    font-size: 0.9rem;
 }
 
-.para1{
-    font-size: 1.5vh;
-    font-family: monospace;
-    margin-bottom: -1.5vh;
+.para1 {
+    font-size: 0.9rem;
+    margin-bottom: -0.5rem;
 }
 
-.continueButton{
+.continueButton {
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 1);
     display: flex;
-    height: 4vh;
+    height: 2rem;
     width: 100%;
     background-color: rgb(251, 251, 251);
-    font-family: monospace;
     justify-content: center;
     align-items: center;
 }
 
-.login{
-    margin-top: 1vh;
-    font-family: monospace;
+.login {
+    margin-top: 0.5rem;
     cursor: pointer;
     display: flex;
     color: rgb(99, 99, 255);
     align-items: center;
-    font-size: 2vh;
+    font-size: 1rem;
     justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .mainContainer {
+        padding: 1rem;
+    }
 }
