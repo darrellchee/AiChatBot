@@ -250,3 +250,34 @@
 #submit-button:active{
   background-color: black;
 }
+
+@media (max-width: 600px) {
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .side-bar {
+    order: 1;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #dcdcdc;
+  }
+  .body {
+    order: 2;
+  }
+  .header {
+    order: 0;
+  }
+  .side-bar-histories {
+    font-size: 4vw;
+  }
+  .user-prompt,
+  .ai-response {
+    max-width: 90vw;
+    font-size: 16px;
+  }
+  #footer-search-bar {
+    width: 90vw;
+  }
+}
