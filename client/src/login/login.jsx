@@ -7,6 +7,7 @@ import { useState } from "react";
 
 
 function Login(){
+    const navigate = useNavigate()
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
     // …after login success:
@@ -17,7 +18,6 @@ function Login(){
     const [invalidLogin, setInvalidLogin] = useState(false);
     const [agreeData, setAgreeData] = useState(false);
     const [agreeDarrell, setAgreeDarrell] = useState(false);
-    const navigate = useNavigate()
     const canContinue = agreeData && agreeDarrell && userDetail.userName.trim() !== '' && userDetail.password.trim() !== '';
     
     const handleNagivateChat = () => {
