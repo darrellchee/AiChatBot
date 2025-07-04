@@ -133,6 +133,13 @@
     padding: 0;
 }
 
+@media (max-width: 600px) {
+    .aiPresets,
+    .setNewAiErrorField {
+        width: 40vw;
+    }
+}
+
 @keyframes shake{
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-8px); }
